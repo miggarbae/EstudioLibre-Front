@@ -1,0 +1,14 @@
+<div class="container">
+    <h1>Archivos Disponibles</h1>
+    <div *ngIf="archivos.length === 0">
+        <p>No hay archivos disponibles.</p>
+    </div>
+    <ul>
+        <li *ngFor="let archivo of archivos">
+        <h3>{{ archivo.nombre }}</h3>
+        <p><strong>Asignatura:</strong> {{ archivo.asignatura }}</p>
+        <p><strong>Nivel:</strong> {{ archivo.nivelEstudio }}</p>
+        </li>
+    </ul>
+</div>
+  
