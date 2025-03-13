@@ -1,0 +1,11 @@
+<h2>Editar Archivo</h2>
+
+<form (submit)="editarArchivo()">
+  <label>Asignatura:</label>
+  <input type="text" [(ngModel)]="archivo.asignatura" name="asignatura" required />
+
+  <label>Nivel de estudio:</label>
+  <input type="text" [(ngModel)]="archivo.nivelEstudio" name="nivelEstudio" required />
+
+  <button type="submit">Guardar Cambios</button>
+</form>
