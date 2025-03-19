@@ -1,6 +1,17 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
+
+// Interfaz para definir la estructura de un archivo para que TypeScript lo reconozca y pueda validar el código
+export interface Archivo {
+  id: number;
+  nombre: string;
+  tipo: string;
+  asignatura: string;
+  nivelEstudio: string;
+  descripcion: string;
+  fechaSubida: string;
+}
 
 @Injectable({
   providedIn: 'root'
@@ -47,6 +58,14 @@ export class ArchivoService {
     return this.http.get(`http://localhost:8080/api/archivos/descarga/${archivoId}`, {
       headers,
       responseType: 'blob' // Mantener la respuesta en binario
+    });
+  }
+
+  buscarArchivos(termino: string): Observable<Archivo[]> {
+    const body = { nombre: termino };
+  
+    return this.http.post<Archivo[]>(`${this.apiUrl}/buscar`, body, {
+      headers: this.obtenerHeaders(),
     });
   }  
 }

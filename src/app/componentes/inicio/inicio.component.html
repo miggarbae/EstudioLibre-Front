@@ -1,14 +1,31 @@
 <div class="container">
-    <h1>Archivos Disponibles</h1>
+    <h1>📂 Archivos Disponibles</h1>
+
+    <!-- Barra de búsqueda -->
+    <div class="input-group mb-3">
+        <input 
+            type="text" 
+            class="form-control"
+            [(ngModel)]="terminoBusqueda" 
+            (input)="buscarEnTiempoReal()" 
+            placeholder="Buscar archivos por nombre, asignatura, nivel o descripción..." 
+        />
+        <div class="input-group-append">
+            <button class="btn btn-outline-secondary" type="button" (click)="buscarEnTiempoReal()">🔍 Buscar</button>
+        </div>
+    </div>
+
     <div *ngIf="archivos.length === 0">
         <p>No hay archivos disponibles.</p>
     </div>
-    <ul>
-        <li *ngFor="let archivo of archivos">
+
+    <ul class="list-group">
+        <li *ngFor="let archivo of archivos" class="list-group-item">
             <h3>{{ archivo.nombre }}</h3>
             <p><strong>Asignatura:</strong> {{ archivo.asignatura }}</p>
             <p><strong>Nivel:</strong> {{ archivo.nivelEstudio }}</p>
-            <button (click)="descargarArchivo(archivo.id, archivo.nombre, archivo.tipo)">📥 Descargar</button>
+            <p><strong>Descripción:</strong> {{ archivo.descripcion }}</p>
+            <button class="btn btn-primary" (click)="descargarArchivo(archivo.id, archivo.nombre, archivo.tipo)">📥 Descargar</button>
 
             <!-- Mostrar comentarios del archivo -->
             <app-comentarios [archivoId]="archivo.id"></app-comentarios>
