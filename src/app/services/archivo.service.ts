@@ -37,5 +37,16 @@ export class ArchivoService {
     const headers = new HttpHeaders().set('Authorization', `Bearer ${localStorage.getItem('token')}`);
   
     return this.http.post(`${this.apiUrl}/subir`, formData, { headers, responseType: 'text' });
+  } 
+
+  descargarArchivo(archivoId: number, tipo: string): Observable<Blob> {
+    const headers = new HttpHeaders({
+      'Authorization': `Bearer ${localStorage.getItem('token')}`
+    });
+  
+    return this.http.get(`http://localhost:8080/api/archivos/descarga/${archivoId}`, {
+      headers,
+      responseType: 'blob' // Mantener la respuesta en binario
+    });
   }  
 }

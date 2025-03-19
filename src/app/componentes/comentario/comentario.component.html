@@ -1,0 +1,23 @@
+<div class="comentarios-container">
+    <h3>Comentarios</h3>
+  
+    <!-- Lista de comentarios -->
+    <div *ngFor="let comentario of comentarios" class="comentario">
+      <p><strong>{{ comentario.usuario }}</strong> ({{ comentario.valoracion }}/5)</p>
+      <button (click)="editarComentario(comentario)">✏️ Editar</button>
+      <button (click)="eliminarComentario(comentario.id!)">🗑️ Eliminar</button>
+      <p>{{ comentario.texto }}</p>
+      <p><small>{{ comentario.fechaCreacion | date:'short' }}</small></p>
+      <button (click)="eliminarComentario(comentario.id!)">❌ Eliminar</button>
+    </div>
+  
+    <!-- Agregar un nuevo comentario -->
+    <div class="nuevo-comentario">
+      <textarea [(ngModel)]="nuevoComentario" placeholder="Escribe un comentario..."></textarea>
+      <select [(ngModel)]="nuevaValoracion">
+        <option *ngFor="let valor of [1,2,3,4,5]" [value]="valor">{{ valor }} ⭐</option>
+      </select>
+      <button (click)="agregarComentario()">Enviar</button>
+    </div>
+  </div>
+  

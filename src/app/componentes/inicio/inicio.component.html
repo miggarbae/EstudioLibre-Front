@@ -5,10 +5,13 @@
     </div>
     <ul>
         <li *ngFor="let archivo of archivos">
-        <h3>{{ archivo.nombre }}</h3>
-        <p><strong>Asignatura:</strong> {{ archivo.asignatura }}</p>
-        <p><strong>Nivel:</strong> {{ archivo.nivelEstudio }}</p>
+            <h3>{{ archivo.nombre }}</h3>
+            <p><strong>Asignatura:</strong> {{ archivo.asignatura }}</p>
+            <p><strong>Nivel:</strong> {{ archivo.nivelEstudio }}</p>
+            <button (click)="descargarArchivo(archivo.id, archivo.nombre, archivo.tipo)">📥 Descargar</button>
+
+            <!-- Mostrar comentarios del archivo -->
+            <app-comentarios [archivoId]="archivo.id"></app-comentarios>
         </li>
     </ul>
 </div>
-  
