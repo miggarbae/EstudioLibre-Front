@@ -3,6 +3,7 @@ import { ArchivoService } from '../../services/archivo.service';
 import { CommonModule } from '@angular/common';
 import { ComentariosComponent } from '../comentario/comentario.component';
 import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-inicio',
@@ -14,11 +15,28 @@ import { FormsModule } from '@angular/forms';
 export class InicioComponent implements OnInit {
   archivos: any[] = [];
   terminoBusqueda: string = '';
+  usuarioLogeado: boolean = false; //variable para verificar si el usuario esta logeado
 
-  constructor(private archivoService: ArchivoService) {}
+  constructor(private archivoService: ArchivoService, private router: Router) {}
 
   ngOnInit(): void {
-    this.obtenerTodosLosArchivos();;
+    this.obtenerTodosLosArchivos();
+    // Verifica si hay un token en el localStorage
+    this.usuarioLogeado = !!localStorage.getItem('token');
+  }
+
+  irALogin() {
+    this.router.navigate(['/login']);
+  }
+
+  irARegistro() {
+    this.router.navigate(['/registro']);
+  }
+
+  logout() {
+    localStorage.removeItem('token');
+    this.usuarioLogeado = false; // Oculta el botón de logout
+    this.router.navigate(['/']); // Redirige a la página de inicio
   }
 
   obtenerTodosLosArchivos(): void {
@@ -37,7 +55,7 @@ export class InicioComponent implements OnInit {
     this.archivoService.buscarArchivos(this.terminoBusqueda).subscribe(
       data => {
         this.archivos = data;
-        console.log('🔍 Resultados encontrados:', data); // 🛠 Depuración
+        console.log('🔍 Resultados encontrados:', data); // Depuración
       },
       error => console.error("❌ Error en la búsqueda:", error)
     );

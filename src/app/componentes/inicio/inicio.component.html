@@ -1,6 +1,15 @@
 <div class="container">
     <h1>📂 Archivos Disponibles</h1>
-
+    <div class="container text-center mt-3">
+        <div *ngIf="!usuarioLogeado" class="d-flex justify-content-center gap-3">
+          <button class="btn btn-primary" (click)="irALogin()">🔑 Login</button>
+          <button class="btn btn-success" (click)="irARegistro()">📝 Regístrate</button>
+        </div>
+    </div>
+    <div *ngIf="usuarioLogeado" class="d-flex justify-content-center mt-3">
+        <button class="btn btn-danger" (click)="logout()">🚪 Cerrar sesión</button>
+    </div>
+            
     <!-- Barra de búsqueda -->
     <div class="input-group mb-3">
         <input 

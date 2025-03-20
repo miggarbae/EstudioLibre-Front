@@ -8,7 +8,7 @@ import { AuthGuard } from './guards/auth.guard';
 export const routes: Routes = [
   { path: '', component: InicioComponent }, // Página de inicio
   { path: 'login', component: LoginComponent }, // Página de inicio de sesión
-  { path: 'register', component: RegistroComponent }, // Página de registro
+  { path: 'registro', component: RegistroComponent }, // Página de registro
   { path: 'inicio', component: InicioComponent, canActivate: [AuthGuard] }, // Contenido restringido para usuarios logeados
   { path: 'editar-archivo/:id', component: EditarArchivoComponent, canActivate: [AuthGuard] },
   { path: '**', redirectTo: '' }, // Redirigir rutas desconocidas a inicio
