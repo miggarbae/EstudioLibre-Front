@@ -4,6 +4,8 @@ import { CommonModule } from '@angular/common';
 import { ComentariosComponent } from '../comentario/comentario.component';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
+import { TokenService } from '../../services/token.service';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-inicio',
@@ -16,13 +18,24 @@ export class InicioComponent implements OnInit {
   archivos: any[] = [];
   terminoBusqueda: string = '';
   usuarioLogeado: boolean = false; //variable para verificar si el usuario esta logeado
+  rolUsuario: string | null = null; //variable para verificar si el usuario es admin
 
-  constructor(private archivoService: ArchivoService, private router: Router) {}
+  // Variables para reportar archivos
+  archivoSeleccionadoParaReporte: any = null;
+  motivoSeleccionado: string = '';
+  otroMotivo: string = '';
+
+  constructor(
+    private archivoService: ArchivoService, 
+    private router: Router,
+    private tokenService: TokenService,
+    private http: HttpClient
+  ) {}
 
   ngOnInit(): void {
-    this.obtenerTodosLosArchivos();
-    // Verifica si hay un token en el localStorage
     this.usuarioLogeado = !!localStorage.getItem('token');
+    this.rolUsuario = this.tokenService.getUserRole(); // Obtenemos el rol del token
+    this.obtenerTodosLosArchivos();
   }
 
   irALogin() {
@@ -75,4 +88,36 @@ export class InicioComponent implements OnInit {
       console.error("Error al descargar el archivo", error);
     });
   }
+  
+  reportarArchivo(archivo: any) {
+    this.archivoSeleccionadoParaReporte = archivo;
+    this.motivoSeleccionado = '';
+    this.otroMotivo = '';
+  }
+
+  enviarReporte() {
+    const motivoFinal = this.motivoSeleccionado === 'otros' ? this.otroMotivo : this.motivoSeleccionado;
+    if (!motivoFinal.trim()) {
+      alert('⚠️ Debes especificar un motivo.');
+      return;
+    }
+  
+    const reporte = {
+      motivo: motivoFinal,
+      archivo: { id: this.archivoSeleccionadoParaReporte.id }
+    };
+  
+    this.http.post('http://localhost:8080/api/reportes', reporte, { responseType: 'text' }).subscribe({
+      next: () => {
+        alert("📩 Reporte enviado correctamente.");
+        this.archivoSeleccionadoParaReporte = null;
+        this.motivoSeleccionado = '';
+        this.otroMotivo = '';
+      },
+      error: () => {
+        alert("❌ Error al enviar el reporte.");
+      }
+    });
+    
+  }  
 }
