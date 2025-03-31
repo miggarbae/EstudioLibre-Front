@@ -1,76 +1,78 @@
-<div class="container">
-    <h1>📂 Archivos Disponibles</h1>
-    <div class="container text-center mt-3">
-        <div *ngIf="!usuarioLogeado" class="d-flex justify-content-center gap-3">
-          <button class="btn btn-primary" (click)="irALogin()">🔑 Login</button>
-          <button class="btn btn-success" (click)="irARegistro()">📝 Regístrate</button>
-        </div>
+<div class="container my-4">
+    <h1 class="text-center mb-4">📂 Archivos Disponibles</h1>
+  
+    <!-- Botones de Login/Registro -->
+    <div class="text-center mb-3" *ngIf="!usuarioLogeado">
+      <button class="btn btn-primary me-2" (click)="irALogin()">🔑 Login</button>
+      <button class="btn btn-success" (click)="irARegistro()">📝 Regístrate</button>
     </div>
-    <div *ngIf="usuarioLogeado" class="d-flex justify-content-center mt-3">
-        <button class="btn btn-danger" (click)="logout()">🚪 Cerrar sesión</button>
+  
+    <!-- Botón de Logout -->
+    <div *ngIf="usuarioLogeado" class="text-center mb-4">
+      <button class="btn btn-outline-danger" (click)="logout()">🚪 Cerrar sesión</button>
     </div>
-    <!-- Mostrar mensaje si el usuario es ADMIN -->
-    <div *ngIf="rolUsuario === 'ADMIN'" class="alert alert-info mt-4">
-        👑 <strong>Administrador:</strong> Tienes acceso completo al sistema. Puedes gestionar archivos, usuarios y reportes.
+  
+    <!-- Rol del Usuario -->
+    <div *ngIf="rolUsuario === 'ADMIN'" class="alert alert-info">
+      👑 <strong>Administrador:</strong> Tienes acceso completo al sistema.
     </div>
-
-    <!-- Mostrar mensaje si el usuario es USER -->
-    <div *ngIf="rolUsuario === 'USER'" class="alert alert-success mt-4">
-        🙋 <strong>Usuario:</strong> Puedes buscar, descargar y comentar archivos.
+    <div *ngIf="rolUsuario === 'USER'" class="alert alert-success">
+      🙋 <strong>Usuario:</strong> Puedes buscar, descargar y comentar archivos.
     </div>
-
-    <!-- Barra de búsqueda -->
-    <div class="input-group mb-3">
-        <input 
-            type="text" 
-            class="form-control"
-            [(ngModel)]="terminoBusqueda" 
-            (input)="buscarEnTiempoReal()" 
-            placeholder="Buscar archivos por nombre, asignatura, nivel o descripción..." 
-        />
-        <div class="input-group-append">
-            <button class="btn btn-outline-secondary" type="button" (click)="buscarEnTiempoReal()">🔍 Buscar</button>
-        </div>
+  
+    <!-- Buscador -->
+    <div class="input-group mb-4">
+      <input type="text" class="form-control" [(ngModel)]="terminoBusqueda"
+             (input)="buscarEnTiempoReal()" placeholder="Buscar archivos por nombre, asignatura, nivel o descripción..." />
+      <button class="btn btn-outline-secondary" type="button" (click)="buscarEnTiempoReal()">🔍 Buscar</button>
     </div>
-
-    <!-- Archivos -->
-    <div *ngIf="archivos.length === 0">
-        <p>No hay archivos disponibles.</p>
-    </div>
-
+  
+    <!-- Lista de archivos -->
+    <div *ngIf="archivos.length === 0" class="text-center text-muted">No hay archivos disponibles.</div>
+  
     <ul class="list-group">
-        <li *ngFor="let archivo of archivos" class="list-group-item">
-            <h3>{{ archivo.nombre }}</h3>
-            <p><strong>Asignatura:</strong> {{ archivo.asignatura }}</p>
-            <p><strong>Nivel:</strong> {{ archivo.nivelEstudio }}</p>
-            <p><strong>Descripción:</strong> {{ archivo.descripcion }}</p>
-            <button class="btn btn-primary" (click)="descargarArchivo(archivo.id, archivo.nombre, archivo.tipo)">📥 Descargar</button>
-            <button class="btn btn-warning mt-2" (click)="reportarArchivo(archivo)">🚩 Reportar</button>
-
-            <!-- Formulario de reporte -->
-            <div *ngIf="archivoSeleccionadoParaReporte?.id === archivo.id" class="mt-3 border p-3 rounded bg-light">
-                <label><strong>Selecciona el motivo del reporte:</strong></label>
-                <select class="form-select" [(ngModel)]="motivoSeleccionado">
-                    <option value="">-- Selecciona una opción --</option>
-                    <option value="contenido inapropiado">Contenido inapropiado</option>
-                    <option value="archivo dañado">Archivo dañado</option>
-                    <option value="spam">Spam</option>
-                    <option value="otros">Otros</option>
-                </select>
-
-                <div *ngIf="motivoSeleccionado === 'otros'" class="mt-2">
-                    <label><strong>Especifica el motivo:</strong></label>
-                    <textarea class="form-control" [(ngModel)]="otroMotivo" rows="2"></textarea>
-                </div>
-
-                <div class="d-flex gap-2 mt-3">
-                    <button class="btn btn-success" (click)="enviarReporte()">✅ Enviar</button>
-                    <button class="btn btn-secondary" (click)="archivoSeleccionadoParaReporte = null">❌ Cancelar</button>
-                </div>
-            </div>
-
-            <!-- Mostrar comentarios del archivo -->
-            <app-comentarios [archivoId]="archivo.id"></app-comentarios>
-        </li>
+      <li *ngFor="let archivo of archivos" class="list-group-item mb-3 shadow-sm rounded">
+        <div class="d-flex justify-content-between align-items-center">
+          <h4 class="mb-0">{{ archivo.nombre }}</h4>
+          <span class="badge bg-primary">{{ archivo.nivelEstudio }}</span>
+        </div>
+        <p class="mb-1"><strong>Asignatura:</strong> {{ archivo.asignatura }}</p>
+        <p class="mb-2"><strong>Descripción:</strong> {{ archivo.descripcion }}</p>
+  
+        <!-- Acciones -->
+        <div class="d-flex gap-2 flex-wrap">
+          <button class="btn btn-outline-primary btn-sm" (click)="descargarArchivo(archivo.id, archivo.nombre, archivo.tipo)">📥 Descargar</button>
+          <button class="btn btn-outline-warning btn-sm" (click)="reportarArchivo(archivo)">🚩 Reportar</button>
+        </div>
+  
+        <!-- Formulario de reporte -->
+        <div *ngIf="archivoSeleccionadoParaReporte?.id === archivo.id" class="bg-light mt-3 p-3 border-start border-warning rounded">
+          <label class="form-label"><strong>Selecciona el motivo del reporte:</strong></label>
+          <select class="form-select mb-2" [(ngModel)]="motivoSeleccionado">
+            <option value="">-- Selecciona una opción --</option>
+            <option value="contenido inapropiado">Contenido inapropiado</option>
+            <option value="archivo dañado">Archivo dañado</option>
+            <option value="spam">Spam</option>
+            <option value="otros">Otros</option>
+          </select>
+  
+          <div *ngIf="motivoSeleccionado === 'otros'">
+            <label class="form-label"><strong>Especifica el motivo:</strong></label>
+            <textarea class="form-control mb-2" [(ngModel)]="otroMotivo" rows="2"></textarea>
+          </div>
+  
+          <div class="d-flex gap-2">
+            <button class="btn btn-success btn-sm" (click)="enviarReporte()">✅ Enviar</button>
+            <button class="btn btn-secondary btn-sm" (click)="archivoSeleccionadoParaReporte = null">❌ Cancelar</button>
+          </div>
+        </div>
+  
+        <!-- Comentarios -->
+        <app-comentarios [archivoId]="archivo.id"></app-comentarios>
+      </li>
     </ul>
-</div>
+  </div>
+  
+  <!-- Subida de archivos -->
+  <app-subir-archivo></app-subir-archivo>
+  

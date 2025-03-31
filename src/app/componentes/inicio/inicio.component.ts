@@ -6,11 +6,12 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TokenService } from '../../services/token.service';
 import { HttpClient } from '@angular/common/http';
+import { SubirArchivoComponent } from "../subir-archivo/subir-archivo.component";
 
 @Component({
   selector: 'app-inicio',
   standalone: true,
-  imports: [CommonModule, ComentariosComponent, FormsModule],
+  imports: [CommonModule, ComentariosComponent, FormsModule, SubirArchivoComponent],
   templateUrl: './inicio.component.html',
   styleUrl: './inicio.component.scss'
 })

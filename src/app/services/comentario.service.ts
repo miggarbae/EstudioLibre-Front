@@ -60,4 +60,19 @@ export class ComentarioService {
       headers: this.obtenerHeaders(),
     });
   }
+
+    // Obtener la valoración del usuario actual para un archivo
+    obtenerValoracionUsuario(archivoId: number): Observable<number> {
+      return this.http.get<number>(`${this.apiUrl}/valoracion/${archivoId}`, {
+        headers: this.obtenerHeaders(),
+      });
+    }
+  
+    // Obtener la valoración media de un archivo
+    obtenerValoracionMedia(archivoId: number): Observable<number> {
+      return this.http.get<number>(`${this.apiUrl}/valoracion-media/${archivoId}`, {
+        headers: this.obtenerHeaders(),
+      });
+    }
+  
 }

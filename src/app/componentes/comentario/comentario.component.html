@@ -1,22 +1,35 @@
 <div class="comentarios-container">
-    <h3>Comentarios</h3>
+  <h3>Comentarios</h3>
+
+  <!-- Valoración media -->
+  <div *ngIf="valoracionMedia !== null">
+    <p><strong>Valoración media del archivo:</strong> {{ valoracionMedia.toFixed(1) }}/5 ⭐</p>
+  </div>
+  <div *ngIf="valoracionUsuario !== null">
+    <p>Tu valoracion: {{ valoracionUsuario }}/5 ⭐</p>
+  </div>
+  <!-- Lista de comentarios -->
+  <div *ngFor="let comentario of comentarios" class="comentario mb-3 p-3 border rounded bg-white shadow-sm">
+    <p class="mb-1"><strong>{{ comentario.usuario }}</strong> ({{ comentario.valoracion }}/5)</p>
+    <p class="mb-1">{{ comentario.texto }}</p>
+    <p class="text-muted"><small>{{ comentario.fechaCreacion | date:'short' }}</small></p>
   
-    <!-- Lista de comentarios -->
-    <div *ngFor="let comentario of comentarios" class="comentario">
-      <p><strong>{{ comentario.usuario }}</strong> ({{ comentario.valoracion }}/5)</p>
-      <button (click)="editarComentario(comentario)">✏️ Editar</button>
-      <button (click)="eliminarComentario(comentario.id!)">🗑️ Eliminar</button>
-      <p>{{ comentario.texto }}</p>
-      <p><small>{{ comentario.fechaCreacion | date:'short' }}</small></p>
+    <!-- Botones solo si el comentario es del usuario -->
+    <div *ngIf="comentario.usuario === usuarioActual">
+      <button class="btn btn-outline-primary btn-sm me-2" (click)="editarComentario(comentario)">✏️ Editar</button>
+      <button class="btn btn-outline-danger btn-sm" (click)="eliminarComentario(comentario.id!)">🗑️ Eliminar</button>
     </div>
-  
-    <!-- Agregar un nuevo comentario -->
-    <div class="nuevo-comentario">
-      <textarea [(ngModel)]="nuevoComentario" placeholder="Escribe un comentario..."></textarea>
-      <select [(ngModel)]="nuevaValoracion">
+  </div>  
+
+  <!-- Agregar un nuevo comentario -->
+  <div class="nuevo-comentario">
+    <textarea [(ngModel)]="nuevoComentario" placeholder="Escribe un comentario..."></textarea>
+
+    <div *ngIf="valoracionUsuario === null">
+      <select class="form-select form-select-sm w-auto d-inline-block me-2" [(ngModel)]="nuevaValoracion">
         <option *ngFor="let valor of [1,2,3,4,5]" [value]="valor">{{ valor }} ⭐</option>
       </select>
-      <button (click)="agregarComentario()">Enviar</button>
     </div>
+    <button class="btn btn-success btn-sm" (click)="agregarComentario()">Enviar</button>
   </div>
-  
+</div>

@@ -1,4 +1,64 @@
-/* You can add global styles to this file, and also import other style files */
+/* Importar Bootstrap */
+@import '../node_modules/bootstrap/scss/bootstrap.scss';
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+/* Estilos base */
+html, body {
+  height: 100%;
+  margin: 0;
+  font-family: 'Roboto', 'Helvetica Neue', sans-serif;
+  background-color: #f8f9fa;
+  color: #343a40;
+}
+
+/* Contenedor principal */
+.container {
+  padding: 2rem;
+}
+
+/* Títulos */
+h1, h2, h3 {
+  color: #212529;
+  margin-bottom: 1rem;
+}
+
+/* Comentarios */
+.comentarios-container {
+  background-color: #ffffff;
+  padding: 1rem 1.5rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+  margin-top: 2rem;
+}
+
+.comentario {
+  border-bottom: 1px solid #dee2e6;
+  padding: 0.75rem 0;
+}
+
+.nuevo-comentario textarea {
+  width: 100%;
+  margin-bottom: 0.5rem;
+  resize: vertical;
+  padding: 0.5rem;
+  border-radius: 0.25rem;
+  border: 1px solid #ced4da;
+}
+
+.nuevo-comentario select,
+.nuevo-comentario button {
+  margin-top: 0.5rem;
+}
+
+/* Botones personalizados si deseas diferenciarlos */
+button {
+  border-radius: 0.25rem;
+}
+
+/* Formulario de reporte */
+.bg-light {
+  background-color: #f1f3f5 !important;
+}
+
+textarea.form-control {
+  resize: vertical;
+}
