@@ -1,27 +1,25 @@
-<form (submit)="subirArchivo()">
+<form (submit)="subirArchivo()" class="needs-validation" novalidate>
     <label for="archivo">Selecciona un archivo:</label>
-    <input type="file" (change)="onFileSelected($event)" accept=".pdf,.docx" required>
-
+    <input type="file" (change)="onFileSelected($event)" class="form-control" accept=".pdf,.docx" required>
+  
     <label for="descripcion">Descripción (opcional):</label>
-    <textarea [(ngModel)]="descripcion" name="descripcion" rows="3"></textarea>
-
-    <!-- Selector de asignatura -->
+    <textarea [(ngModel)]="descripcion" name="descripcion" rows="3" class="form-control"></textarea>
+  
     <label for="asignatura">Asignatura:</label>
-    <select [(ngModel)]="asignatura" name="asignatura" required>
-        <option value="" disabled selected>Seleccione una asignatura</option>
-        <option *ngFor="let materia of materias" [value]="materia">{{ materia }}</option>
+    <select [(ngModel)]="asignatura" name="asignatura" class="form-select" required>
+      <option value="" disabled selected>Seleccione una asignatura</option>
+      <option *ngFor="let materia of materias" [value]="materia">{{ materia }}</option>
     </select>
-
-    <!-- Selector de nivel de estudios -->
+  
     <label for="nivelEstudio">Nivel de Estudios:</label>
-    <select [(ngModel)]="nivelEstudio" name="nivelEstudio" required>
-        <option value="" disabled selected>Seleccione un nivel</option>
-        <option *ngFor="let nivel of niveles" [value]="nivel">{{ nivel }}</option>
+    <select [(ngModel)]="nivelEstudio" name="nivelEstudio" class="form-select" required>
+      <option value="" disabled selected>Seleccione un nivel</option>
+      <option *ngFor="let nivel of niveles" [value]="nivel">{{ nivel }}</option>
     </select>
-
+  
     <div *ngIf="vistaPrevia">
-        <p><strong>Vista previa:</strong> {{ nombreArchivo }}</p>
+      <p><strong>Vista previa:</strong> {{ nombreArchivo }}</p>
     </div>
-
-    <button type="submit">Subir Archivo</button>
-</form>
+  
+    <button type="submit" class="btn btn-success">Subir Archivo</button>
+  </form>  

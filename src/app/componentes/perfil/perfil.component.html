@@ -1,0 +1,77 @@
+<div class="container mt-4 perfil-container">
+  <div class="card shadow">
+    <div class="card-body">
+      <h2 class="card-title text-center mb-4">Mi Perfil</h2>
+
+      <!-- Imagen de perfil editable -->
+      <div class="d-flex align-items-center mb-4 perfil-imagen-wrapper">
+        <div class="imagen-editable" (click)="abrirInputImagen()">
+          <img [src]="obtenerImagenPerfil()" alt="Imagen de perfil" class="rounded-circle imagen-perfil" width="100" height="100" />
+          <i class="bi bi-pencil-fill icono-editar"></i>
+          <input type="file" #inputImagen (change)="onFileSelected($event)" hidden>
+        </div>
+
+        <div>
+          <p><strong>Nombre de usuario:</strong> {{ usuario.username }}</p>
+          <p><strong>Correo electrónico:</strong> {{ usuario.email }}</p>
+        </div>
+      </div>
+
+      <div class="text-center mb-4">
+        <button class="btn btn-primary me-2" (click)="habilitarEdicion()">Modificar Perfil</button>
+        <button class="btn btn-danger" (click)="confirmarEliminacion()">Eliminar Cuenta</button>
+      </div>
+
+      <div *ngIf="enEdicion" class="formulario-edicion mt-4">
+        <h4>Editar Perfil</h4>
+        <form (ngSubmit)="actualizarPerfil()">
+          <div class="mb-3">
+            <label for="username" class="form-label">Nombre de usuario:</label>
+            <input type="text" class="form-control" id="username" [(ngModel)]="usuario.username" name="username" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="email" class="form-label">Correo electrónico:</label>
+            <input type="email" class="form-control" id="email" [(ngModel)]="usuario.email" name="email" required>
+          </div>
+
+          <div class="mb-3">
+            <label for="password" class="form-label">Nueva contraseña:</label>
+            <input type="password" class="form-control" id="password" [(ngModel)]="nuevaContrasena" name="password">
+          </div>
+
+          <div class="text-end">
+            <button type="submit" class="btn btn-success me-2">Guardar Cambios</button>
+            <button type="button" class="btn btn-secondary" (click)="cancelarEdicion()">Cancelar</button>
+          </div>
+        </form>
+      </div>
+
+      <hr class="my-5" />
+      <h4>Mis Archivos</h4>
+
+      <div class="table-responsive">
+        <table class="table table-striped align-middle">
+          <thead class="table-dark">
+            <tr>
+              <th>Nombre del Archivo</th>
+              <th>Fecha de Subida</th>
+              <th>Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let archivo of archivos">
+              <td>{{ archivo.nombre }}</td>
+              <td>{{ archivo.fecha | date: 'short' }}</td>
+              <td>
+                <button class="btn btn-sm btn-outline-primary me-2" (click)="descargarArchivo(archivo)">Descargar</button>
+                <button class="btn btn-sm btn-outline-danger" (click)="eliminarArchivo(archivo)">Eliminar</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>

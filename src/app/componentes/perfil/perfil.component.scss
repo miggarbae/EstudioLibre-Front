@@ -1,0 +1,36 @@
+.perfil-imagen-wrapper {
+    position: relative;
+  }
+  
+  .imagen-editable {
+    position: relative;
+    display: inline-block;
+    cursor: pointer;
+  }
+  
+  .imagen-perfil {
+    border: 2px solid #dee2e6;
+    transition: transform 0.2s;
+  }
+  
+  .imagen-editable:hover .imagen-perfil {
+    transform: scale(1.05);
+  }
+  
+  .icono-editar {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    background-color: #0d6efd;
+    color: white;
+    border-radius: 50%;
+    padding: 5px;
+    font-size: 14px;
+    transform: translate(25%, 25%);
+    transition: background-color 0.3s ease;
+  }
+  
+  .imagen-editable:hover .icono-editar {
+    background-color: #0a58ca;
+  }
+  

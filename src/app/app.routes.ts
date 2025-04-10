@@ -5,6 +5,7 @@ import { RegistroComponent } from './componentes/auth/registro/registro.componen
 import { EditarArchivoComponent } from './componentes/editar-archivo/editar-archivo.component';
 import { AuthGuard } from './guards/auth.guard';
 import { AdminComponent } from './componentes/admin/admin.component';
+import { PerfilComponent } from './componentes/perfil/perfil.component';
 
 export const routes: Routes = [
   { path: '', component: InicioComponent }, // Página de inicio
@@ -13,5 +14,6 @@ export const routes: Routes = [
   { path: 'inicio', component: InicioComponent, canActivate: [AuthGuard] }, // Contenido restringido para usuarios logeados
   { path: 'admin', component: AdminComponent, canActivate: [AuthGuard] }, // Página de administrador
   { path: 'editar-archivo/:id', component: EditarArchivoComponent, canActivate: [AuthGuard] },
+  { path: 'perfil', component: PerfilComponent }, // Página de perfil de usuario
   { path: '**', redirectTo: '' }, // Redirigir rutas desconocidas a inicio
 ];

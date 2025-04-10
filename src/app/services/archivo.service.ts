@@ -67,5 +67,12 @@ export class ArchivoService {
     return this.http.post<Archivo[]>(`${this.apiUrl}/buscar`, body, {
       headers: this.obtenerHeaders(),
     });
-  }  
+  }
+
+  // Método para ver los archivos que ha subido el usuario
+  obtenerArchivosUsuario(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.apiUrl}/mis-archivos`, {
+      headers: this.obtenerHeaders()
+    });
+  }
 }

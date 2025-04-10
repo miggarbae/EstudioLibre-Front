@@ -1,25 +1,6 @@
 <div class="container my-4">
     <h1 class="text-center mb-4">📂 Archivos Disponibles</h1>
   
-    <!-- Botones de Login/Registro -->
-    <div class="text-center mb-3" *ngIf="!usuarioLogeado">
-      <button class="btn btn-primary me-2" (click)="irALogin()">🔑 Login</button>
-      <button class="btn btn-success" (click)="irARegistro()">📝 Regístrate</button>
-    </div>
-  
-    <!-- Botón de Logout -->
-    <div *ngIf="usuarioLogeado" class="text-center mb-4">
-      <button class="btn btn-outline-danger" (click)="logout()">🚪 Cerrar sesión</button>
-    </div>
-  
-    <!-- Rol del Usuario -->
-    <div *ngIf="rolUsuario === 'ADMIN'" class="alert alert-info">
-      👑 <strong>Administrador:</strong> Tienes acceso completo al sistema.
-    </div>
-    <div *ngIf="rolUsuario === 'USER'" class="alert alert-success">
-      🙋 <strong>Usuario:</strong> Puedes buscar, descargar y comentar archivos.
-    </div>
-  
     <!-- Buscador -->
     <div class="input-group mb-4">
       <input type="text" class="form-control" [(ngModel)]="terminoBusqueda"
@@ -74,5 +55,4 @@
   </div>
   
   <!-- Subida de archivos -->
-  <app-subir-archivo></app-subir-archivo>
-  
+  <!-- <app-subir-archivo></app-subir-archivo> -->

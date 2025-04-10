@@ -1,2 +1,10 @@
+<app-header></app-header>
+<app-navbar></app-navbar>
+
+<div class="modal-backdrop" *ngIf="mostrarFormulario" (click)="cerrarFormulario()">
+  <div class="modal-content" (click)="$event.stopPropagation()">
+    <app-subir-archivo></app-subir-archivo>
+  </div>
+</div>
+
 <router-outlet></router-outlet>
-<!-- <app-subir-archivo></app-subir-archivo> -->

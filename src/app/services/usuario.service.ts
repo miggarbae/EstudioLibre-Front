@@ -24,4 +24,24 @@ export class UsuarioService {
   obtenerReportes(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/reportes`, { headers: this.obtenerHeaders() });
   }
+
+  obtenerUsuario(): Observable<any> {
+    return this.http.get(`${this.apiUrl}/perfil`, {
+      headers: this.obtenerHeaders()
+    });
+  }
+
+  actualizarUsuario(formData: FormData): Observable<any> {
+    return this.http.put(`${this.apiUrl}/actualizar`, formData, {
+      headers: this.obtenerHeaders()
+    });
+  }
+
+  subirImagen(id: number, formData: FormData): Observable<any> {
+    return this.http.post(`${this.apiUrl}/${id}/imagen`, formData, {
+      headers: new HttpHeaders({
+        Authorization: `Bearer ${localStorage.getItem('token') || ''}`
+      })
+    });
+  }  
 }

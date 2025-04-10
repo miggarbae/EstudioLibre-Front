@@ -1,0 +1,17 @@
+nav.navbar {
+    z-index: 1050;
+    padding: 0.5rem 1rem;
+  
+    .navbar-brand {
+      font-weight: bold;
+      font-size: 1.2rem;
+      img {
+        object-fit: contain;
+      }
+    }
+  
+    button {
+      font-size: 0.9rem;
+    }
+  }
+  
