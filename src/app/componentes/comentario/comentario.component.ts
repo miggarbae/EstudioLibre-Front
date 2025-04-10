@@ -3,11 +3,13 @@ import { ComentarioService } from '../../services/comentario.service';
 import { NgIf, NgFor} from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
+import { environment } from '../../../environments/environment';
 
 
 interface Comentario {
   id?: number;
   usuario: string;
+  imagenUsuario?: string;
   archivoId: number;
   texto: string;
   valoracion: number;
@@ -21,6 +23,8 @@ interface Comentario {
   imports: [NgIf, FormsModule, NgFor, DatePipe],
 })
 export class ComentariosComponent implements OnInit {
+  apiBaseUrl = environment.apiBaseUrl;
+  
   @Input() archivoId!: number;
 
   comentarios: Comentario[] = [];

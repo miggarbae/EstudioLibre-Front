@@ -8,18 +8,31 @@
   <div *ngIf="valoracionUsuario !== null">
     <p>Tu valoracion: {{ valoracionUsuario }}/5 ⭐</p>
   </div>
+
   <!-- Lista de comentarios -->
-  <div *ngFor="let comentario of comentarios" class="comentario mb-3 p-3 border rounded bg-white shadow-sm">
-    <p class="mb-1"><strong>{{ comentario.usuario }}</strong> ({{ comentario.valoracion }}/5)</p>
-    <p class="mb-1">{{ comentario.texto }}</p>
-    <p class="text-muted"><small>{{ comentario.fechaCreacion | date:'short' }}</small></p>
-  
-    <!-- Botones solo si el comentario es del usuario -->
-    <div *ngIf="comentario.usuario === usuarioActual">
-      <button class="btn btn-outline-primary btn-sm me-2" (click)="editarComentario(comentario)">✏️ Editar</button>
-      <button class="btn btn-outline-danger btn-sm" (click)="eliminarComentario(comentario.id!)">🗑️ Eliminar</button>
+  <div *ngFor="let comentario of comentarios" class="comentario mb-3 p-3 border rounded bg-white shadow-sm d-flex">
+    <img
+      [src]="comentario.imagenUsuario ? apiBaseUrl + comentario.imagenUsuario : 'assets/usuario-default.jpg'"
+      alt="Imagen perfil"
+      class="rounded-circle me-3"
+      width="50"
+      height="50"
+    />
+    <div>
+      <p class="mb-1">
+        <strong>{{ comentario.usuario }}</strong>
+        ({{ comentario.valoracion }}/5)
+      </p>
+      <p class="mb-1">{{ comentario.texto }}</p>
+      <p class="text-muted"><small>{{ comentario.fechaCreacion | date: 'short' }}</small></p>
+
+      <!-- Botones solo si el comentario es del usuario -->
+      <div *ngIf="comentario.usuario === usuarioActual">
+        <button class="btn btn-outline-primary btn-sm me-2" (click)="editarComentario(comentario)">✏️ Editar</button>
+        <button class="btn btn-outline-danger btn-sm" (click)="eliminarComentario(comentario.id!)">🗑️ Eliminar</button>
+      </div>
     </div>
-  </div>  
+  </div>
 
   <!-- Agregar un nuevo comentario -->
   <div class="nuevo-comentario">

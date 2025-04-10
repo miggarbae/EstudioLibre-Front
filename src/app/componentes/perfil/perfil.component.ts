@@ -170,8 +170,8 @@ export class PerfilComponent implements OnInit {
 
   // Obtener ruta de imagen de perfil
   obtenerImagenPerfil(): string {
-    if (this.usuario?.id && this.usuario?.rutaImagenPerfil) {
-      return `http://localhost:8080/api/usuarios/${this.usuario.id}/imagen?${new Date().getTime()}`;
+    if (this.usuario?.rutaImagenPerfil) {
+      return `http://localhost:8080${this.usuario.rutaImagenPerfil}`;
     }
     return 'assets/usuario-default.jpg';
   }  

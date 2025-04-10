@@ -5,6 +5,7 @@ import { Observable } from 'rxjs';
 interface Comentario {
   id?: number;
   usuario: string;
+  imagenUsuario?: string;
   archivoId: number;
   texto: string;
   valoracion: number;
