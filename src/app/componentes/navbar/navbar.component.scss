@@ -1,7 +1,33 @@
-.fixed-navbar {
-    position: fixed;
-    top: 64px;
-    width: 100%;
-    z-index: 1030;
+/* El wrapper se ajusta automáticamente al tamaño del header + 10px */
+.navbar-wrapper {
+  margin-top: calc(var(--header-height, 64px) + 10px); // fallback por si no está definida
+  width: 100%;
+}
+
+/* Estilo del navbar */
+.navbar {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.05);
+}
+
+/* Estilo para los enlaces del navbar */
+.navbar-nav {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+
+  .nav-link {
+    font-weight: 500;
+    color: #343a40 !important;
+    transition: color 0.2s ease;
+
+    &:hover {
+      color: #007bff !important;
+    }
   }
-  
+
+  .btn {
+    font-size: 0.85rem;
+  }
+}

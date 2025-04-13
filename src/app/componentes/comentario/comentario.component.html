@@ -5,9 +5,12 @@
   <div *ngIf="valoracionMedia !== null">
     <p><strong>Valoración media del archivo:</strong> {{ valoracionMedia.toFixed(1) }}/5 ⭐</p>
   </div>
-  <div *ngIf="valoracionUsuario !== null">
-    <p>Tu valoracion: {{ valoracionUsuario }}/5 ⭐</p>
+  <div *ngIf="valoracionUsuario !== null && valoracionUsuario !== 0">
+    <p><strong>Tu valoración:</strong> {{ valoracionUsuario }}/5 ⭐</p>
   </div>
+  <div *ngIf="valoracionUsuario === 0 || valoracionUsuario === null">
+    <p><strong>Tu valoración:</strong> Sin valorar ⭐</p>
+  </div>  
 
   <!-- Lista de comentarios -->
   <div *ngFor="let comentario of comentarios" class="comentario mb-3 p-3 border rounded bg-white shadow-sm d-flex">
@@ -34,15 +37,33 @@
     </div>
   </div>
 
-  <!-- Agregar un nuevo comentario -->
+  <!-- Agregar valoración sin comentario -->
+  <div *ngIf="valoracionUsuario === null" class="mb-3">
+    <label><strong>Valora este archivo:</strong></label>
+    <select class="form-select form-select-sm w-auto d-inline-block me-2" [(ngModel)]="valoracionDirecta">
+      <option *ngFor="let valor of [1,2,3,4,5]" [value]="valor">{{ valor }} ⭐</option>
+    </select>
+    <button class="btn btn-outline-success btn-sm" (click)="enviarSoloValoracion()">Enviar valoración</button>
+  </div>
+
+  <!-- Agregar nuevo comentario -->
   <div class="nuevo-comentario">
     <textarea [(ngModel)]="nuevoComentario" placeholder="Escribe un comentario..."></textarea>
 
-    <div *ngIf="valoracionUsuario === null">
+    <div>
       <select class="form-select form-select-sm w-auto d-inline-block me-2" [(ngModel)]="nuevaValoracion">
-        <option *ngFor="let valor of [1,2,3,4,5]" [value]="valor">{{ valor }} ⭐</option>
-      </select>
+        <option [ngValue]="null" disabled selected>Sin valorar</option>
+        <option *ngFor="let valor of [1, 2, 3, 4, 5]" [ngValue]="valor">
+          {{ valor }} ⭐
+        </option>
+      </select>      
     </div>
+
     <button class="btn btn-success btn-sm" (click)="agregarComentario()">Enviar</button>
+
+    <div *ngIf="!nuevoComentario && nuevaValoracion === null" class="text-muted mt-1">
+        *Escribe un comentario o selecciona una valoración para enviar.
+    </div>
+
   </div>
-</div>
+

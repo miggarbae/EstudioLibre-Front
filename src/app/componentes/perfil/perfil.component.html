@@ -1,11 +1,11 @@
 <div class="container mt-4 perfil-container">
   <div class="card shadow">
     <div class="card-body">
-      <h2 class="card-title text-center mb-4">Mi Perfil</h2>
+      <h2 class="card-title text-center mb-4 apartados">Mi Perfil</h2>
 
       <!-- Imagen de perfil editable -->
-      <div class="d-flex align-items-center mb-4 perfil-imagen-wrapper">
-        <div class="imagen-editable" (click)="abrirInputImagen()">
+      <div class="d-flex flex-column align-items-center text-center mb-4 perfil-imagen-wrapper">
+        <div class="imagen-editable mb-2" (click)="abrirInputImagen()">
           <img [src]="obtenerImagenPerfil()" alt="Imagen de perfil" class="rounded-circle imagen-perfil" width="100" height="100" />
           <i class="bi bi-pencil-fill icono-editar"></i>
           <input type="file" #inputImagen (change)="onFileSelected($event)" hidden>
@@ -48,7 +48,7 @@
       </div>
 
       <hr class="my-5" />
-      <h4>Mis Archivos</h4>
+      <h4 class="text-center apartados">Mis Archivos</h4>
 
       <div class="table-responsive">
         <table class="table table-striped align-middle">
@@ -56,22 +56,53 @@
             <tr>
               <th>Nombre del Archivo</th>
               <th>Fecha de Subida</th>
-              <th>Acciones</th>
+              <th class="text-center">Acciones</th>
             </tr>
           </thead>
           <tbody>
             <tr *ngFor="let archivo of archivos">
               <td>{{ archivo.nombre }}</td>
-              <td>{{ archivo.fecha | date: 'short' }}</td>
-              <td>
-                <button class="btn btn-sm btn-outline-primary me-2" (click)="descargarArchivo(archivo)">Descargar</button>
-                <button class="btn btn-sm btn-outline-danger" (click)="eliminarArchivo(archivo)">Eliminar</button>
-              </td>
+              <td>{{ archivo.fechaSubida | date: 'short' }}</td>
+              <td class="d-flex gap-2">
+                <button class="btn btn-sm btn-outline-primary flex-fill boton-mini" (click)="descargarArchivo(archivo)"> 📥 Descargar </button>
+                <button class="btn btn-sm btn-outline-warning flex-fill boton-mini" (click)="abrirModalEditar(archivo)"> ✏️ Editar </button>
+                <button class="btn btn-sm btn-outline-danger flex-fill boton-mini" (click)="eliminarArchivo(archivo)"> 🗑️ Eliminar </button>                
+              </td>              
             </tr>
           </tbody>
         </table>
       </div>
-
     </div>
+  </div>
+</div>
+
+<!-- MODAL DE EDICIÓN -->
+<div class="modal-backdrop" *ngIf="archivoSeleccionado" (click)="cerrarModalEditar()"></div>
+<div class="modal-edicion" *ngIf="archivoSeleccionado">
+  <div class="modal-contenido" (click)="$event.stopPropagation()">
+    <h5>Editar Archivo</h5>
+
+    <form (submit)="guardarCambiosArchivo(); $event.preventDefault()">
+      <div class="mb-2">
+        <label>Asignatura:</label>
+        <select [(ngModel)]="archivoSeleccionado.asignatura" name="asignatura" class="form-select" required>
+          <option *ngFor="let materia of materias" [value]="materia">{{ materia }}</option>
+        </select>
+      </div>
+      <div class="mb-2">
+        <label>Nivel de Estudio:</label>
+        <select [(ngModel)]="archivoSeleccionado.nivelEstudio" name="nivelEstudio" class="form-select" required>
+          <option *ngFor="let nivel of niveles" [value]="nivel">{{ nivel }}</option>
+        </select>
+      </div>
+      <div class="mb-2">
+        <label>Descripción:</label>
+        <textarea [(ngModel)]="archivoSeleccionado.descripcion" name="descripcion" class="form-control" rows="3"></textarea>
+      </div>
+      <div class="d-flex justify-content-end mt-3">
+        <button type="submit" class="btn btn-success me-2">Guardar</button>
+        <button type="button" class="btn btn-secondary" (click)="cerrarModalEditar()">Cancelar</button>
+      </div>
+    </form>
   </div>
 </div>

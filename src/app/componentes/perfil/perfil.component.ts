@@ -3,11 +3,12 @@ import { UsuarioService } from '../../services/usuario.service';
 import { ArchivoService } from '../../services/archivo.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { RouterModule } from '@angular/router';
 
 @Component({
   selector: 'app-perfil',
   standalone: true,
-  imports: [CommonModule, FormsModule, DatePipe],
+  imports: [CommonModule, FormsModule, DatePipe, RouterModule],
   templateUrl: './perfil.component.html',
   styleUrls: ['./perfil.component.scss'],
 })
@@ -17,6 +18,11 @@ export class PerfilComponent implements OnInit {
   nuevaContrasena = '';
   imagenSeleccionada: File | null = null;
   enEdicion = false;
+  archivoSeleccionado: any = null;
+
+  // para editar archivos
+  materias = ['Matemáticas', 'Física', 'Química', 'Inglés', 'Historia', 'Biología', 'Lengua', 'Filosofía', 'Informática', 'Otros'];
+  niveles = ['Primaria', 'Secundaria', 'Bachillerato', 'Universidad', 'Oposiciones', 'Otros'];
 
   @ViewChild('inputImagen') inputImagenRef!: ElementRef;
 
@@ -164,9 +170,18 @@ export class PerfilComponent implements OnInit {
   eliminarArchivo(archivo: any): void {
     const confirmar = confirm(`¿Estás seguro de eliminar el archivo "${archivo.nombre}"?`);
     if (confirmar) {
-      alert('Funcionalidad de eliminación de archivos pendiente de implementación');
+      this.archivoService.eliminarArchivo(archivo.id).subscribe({
+        next: () => {
+          alert('Archivo eliminado correctamente.');
+          this.cargarArchivos(); // Recargar lista de archivos
+        },
+        error: (err) => {
+          console.error('Error al eliminar el archivo', err);
+          alert('Error al eliminar el archivo.');
+        }
+      });
     }
-  }
+  }  
 
   // Obtener ruta de imagen de perfil
   obtenerImagenPerfil(): string {
@@ -174,5 +189,30 @@ export class PerfilComponent implements OnInit {
       return `http://localhost:8080${this.usuario.rutaImagenPerfil}`;
     }
     return 'assets/usuario-default.jpg';
-  }  
+  }
+
+  // ventana modal para editar archivo
+  abrirModalEditar(archivo: any) {
+    this.archivoSeleccionado = { ...archivo }; // copia para editar
+  }
+  
+  cerrarModalEditar() {
+    this.archivoSeleccionado = null;
+  }
+  
+  guardarCambiosArchivo() {
+    if (!this.archivoSeleccionado?.id) return;
+  
+    this.archivoService.editarArchivo(this.archivoSeleccionado.id, this.archivoSeleccionado).subscribe({
+      next: () => {
+        alert('Archivo actualizado correctamente.');
+        this.cerrarModalEditar();
+        this.cargarArchivos();
+      },
+      error: (err) => {
+        console.error('Error al editar archivo', err);
+        alert('No se pudo editar el archivo.');
+      }
+    });
+  }
 }

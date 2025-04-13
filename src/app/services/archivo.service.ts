@@ -69,6 +69,12 @@ export class ArchivoService {
     });
   }
 
+  eliminarArchivo(id: number): Observable<any> {
+    return this.http.delete(`${this.apiUrl}/${id}`, {
+      headers: this.obtenerHeaders()
+    });
+  }  
+
   // Método para ver los archivos que ha subido el usuario
   obtenerArchivosUsuario(): Observable<any[]> {
     return this.http.get<any[]>(`${this.apiUrl}/mis-archivos`, {

@@ -1,7 +1,11 @@
-/* Importar Bootstrap */
+/* ================================
+  Bootstrap Core
+================================= */
 @import '../node_modules/bootstrap/scss/bootstrap.scss';
 
-/* Estilos base */
+/* ================================
+  Estilos base del proyecto
+================================= */
 html, body {
   height: 100%;
   margin: 0;
@@ -14,18 +18,42 @@ body {
   padding-top: 70px;
 }
 
-/* Contenedor principal */
+/* ================================
+  Ajustes para Angular Material Layout
+================================= */
+
+:root {
+  --header-height: 40px; // Ajusta este valor al alto real de tu header (logo + padding) para que el header no se superponga al navbar
+}
+
+app-navbar {
+  width: 100%;
+  z-index: 10;
+}
+
+router-outlet {
+  display: block;
+  padding: 1rem;
+}
+
+/* ================================
+  Contenedor principal
+================================= */
 .container {
   padding: 2rem;
 }
 
-/* Títulos */
+/* ================================
+  Tipografía
+================================= */
 h1, h2, h3 {
   color: #212529;
   margin-bottom: 1rem;
 }
 
-/* Comentarios */
+/* ================================
+  Comentarios
+================================= */
 .comentarios-container {
   background-color: #ffffff;
   padding: 1rem 1.5rem;
@@ -53,12 +81,16 @@ h1, h2, h3 {
   margin-top: 0.5rem;
 }
 
-/* Botones personalizados si deseas diferenciarlos */
+/* ================================
+  Botones
+================================= */
 button {
   border-radius: 0.25rem;
 }
 
-/* Formulario de reporte */
+/* ================================
+  Formulario de reporte
+================================= */
 .bg-light {
   background-color: #f1f3f5 !important;
 }

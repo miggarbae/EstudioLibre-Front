@@ -1,0 +1,74 @@
+/* Fondo oscuro al abrir modal */
+.modal-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 999;
+  }
+  
+  /* Estilo del formulario modal */
+  .modal-formulario {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    z-index: 1000;
+    transform: translate(-50%, -50%);
+    background: #fff;
+    padding: 2rem;
+    border-radius: 10px;
+    width: 90%;
+    max-width: 400px;
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.3);
+    animation: fadeIn 0.3s ease-in-out;
+  }
+  
+  .modal-formulario h2 {
+    text-align: center;
+    margin-bottom: 1rem;
+    color: #333;
+  }
+  
+  .modal-formulario input {
+    display: block;
+    width: 100%;
+    padding: 0.6rem;
+    margin-bottom: 1rem;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+  }
+  
+  .modal-formulario button {
+    width: 100%;
+    padding: 0.6rem;
+    background-color: #007bff;
+    border: none;
+    border-radius: 5px;
+    color: white;
+    font-weight: bold;
+    transition: background-color 0.2s ease;
+  }
+  
+  .modal-formulario button:hover {
+    background-color: #0056b3;
+  }
+  
+  .text-danger {
+    color: #dc3545;
+    font-size: 0.9rem;
+    margin-top: 0.5rem;
+  }
+  
+  @keyframes fadeIn {
+    from {
+      opacity: 0;
+      transform: translate(-50%, -60%);
+    }
+    to {
+      opacity: 1;
+      transform: translate(-50%, -50%);
+    }
+  }
+  

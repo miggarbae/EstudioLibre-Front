@@ -1,9 +1,13 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-  <div class="container">
-    <div class="navbar-nav mx-auto">
-      <a class="nav-item nav-link" routerLink="/inicio">🏠 Inicio</a>
-      <a class="nav-item nav-link" (click)="mostrarFormulario()">📤 Subir archivo</a>
-      <button *ngIf="usuarioAutenticado" class="btn btn-outline-info btn-sm" routerLink="/perfil">👤 {{ username }} - Ver Perfil</button>
+<div class="navbar-wrapper">
+  <nav class="navbar navbar-expand-lg navbar-light bg-light shadow-sm py-2">
+    <div class="container">
+      <div class="navbar-nav mx-auto gap-3">
+        <a class="nav-item nav-link" routerLink="/inicio">🏠 Inicio</a>
+        <a class="nav-item nav-link" (click)="mostrarFormulario()">📤 Subir archivo</a>
+        <a *ngIf="usuarioAutenticado" class="btn btn-outline-info btn-sm" routerLink="/perfil">
+          👤 {{ username }} - Ver Perfil
+        </a>
+      </div>
     </div>
-  </div>
-</nav>
+  </nav>
+</div>

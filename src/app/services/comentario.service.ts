@@ -36,13 +36,13 @@ export class ComentarioService {
   }
 
   // Agregar un comentario
-  agregarComentario(archivoId: number, texto: string, valoracion: number): Observable<Comentario> {
+  agregarComentario(archivoId: number, texto: string, valoracion: number | null): Observable<Comentario> {
     const body = { texto, valoracion };
-
+  
     return this.http.post<Comentario>(`${this.apiUrl}/${archivoId}`, body, {
       headers: this.obtenerHeaders(),
     });
-  }
+  }   
 
   editarComentario(comentarioId: number, nuevoTexto: string, nuevaValoracion: number): Observable<Comentario> {
     const params = new HttpParams()
@@ -62,18 +62,24 @@ export class ComentarioService {
     });
   }
 
-    // Obtener la valoración del usuario actual para un archivo
-    obtenerValoracionUsuario(archivoId: number): Observable<number> {
-      return this.http.get<number>(`${this.apiUrl}/valoracion/${archivoId}`, {
-        headers: this.obtenerHeaders(),
-      });
-    }
-  
-    // Obtener la valoración media de un archivo
-    obtenerValoracionMedia(archivoId: number): Observable<number> {
-      return this.http.get<number>(`${this.apiUrl}/valoracion-media/${archivoId}`, {
-        headers: this.obtenerHeaders(),
-      });
-    }
-  
+  // Obtener la valoración del usuario actual para un archivo
+  obtenerValoracionUsuario(archivoId: number): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/valoracion/${archivoId}`, {
+      headers: this.obtenerHeaders(),
+    });
+  }
+
+  // Obtener la valoración media de un archivo
+  obtenerValoracionMedia(archivoId: number): Observable<number> {
+    return this.http.get<number>(`${this.apiUrl}/valoracion-media/${archivoId}`, {
+      headers: this.obtenerHeaders(),
+    });
+  }
+
+  valorarArchivo(archivoId: number, valoracion: number): Observable<void> {
+    return this.http.post<void>(`${this.apiUrl}/valorar/${archivoId}`, null, {
+      headers: this.obtenerHeaders(),
+      params: new HttpParams().set('valoracion', valoracion.toString())
+    });
+  }  
 }

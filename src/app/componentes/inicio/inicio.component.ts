@@ -3,14 +3,14 @@ import { ArchivoService } from '../../services/archivo.service';
 import { CommonModule } from '@angular/common';
 import { ComentariosComponent } from '../comentario/comentario.component';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
-import { TokenService } from '../../services/token.service';
 import { HttpClient } from '@angular/common/http';
+import { LoginComponent } from '../auth/login/login.component';
+import { RegistroComponent } from '../auth/registro/registro.component';
 
 @Component({
   selector: 'app-inicio',
   standalone: true,
-  imports: [CommonModule, ComentariosComponent, FormsModule],
+  imports: [CommonModule, ComentariosComponent, FormsModule, LoginComponent, RegistroComponent],
   templateUrl: './inicio.component.html',
   styleUrl: './inicio.component.scss'
 })
@@ -18,13 +18,25 @@ export class InicioComponent implements OnInit {
   archivos: any[] = [];
   terminoBusqueda: string = '';
 
-  // Variables para reportar archivos
+  // Login/registro modal
+  mostrarLogin: boolean = false;
+  mostrarRegistro: boolean = false;
+
+  // Login
+  username: string = '';
+  password: string = '';
+
+  // Registro
+  nuevoUsuario = { username: '', email: '', password: '' };
+  errorRegistro: string = '';
+
+  // Reporte
   archivoSeleccionadoParaReporte: any = null;
   motivoSeleccionado: string = '';
   otroMotivo: string = '';
 
   constructor(
-    private archivoService: ArchivoService, 
+    private archivoService: ArchivoService,
     private http: HttpClient
   ) {}
 
@@ -41,25 +53,22 @@ export class InicioComponent implements OnInit {
 
   buscarEnTiempoReal(): void {
     if (this.terminoBusqueda.trim() === '') {
-      this.obtenerTodosLosArchivos(); // Si no hay término, cargar todos los archivos
+      this.obtenerTodosLosArchivos();
       return;
     }
-  
+
     this.archivoService.buscarArchivos(this.terminoBusqueda).subscribe(
-      data => {
-        this.archivos = data;
-        console.log('🔍 Resultados encontrados:', data); // Depuración
-      },
+      data => this.archivos = data,
       error => console.error("❌ Error en la búsqueda:", error)
     );
-  }  
+  }
 
   descargarArchivo(archivoId: number, nombre: string, tipo: string) {
     this.archivoService.descargarArchivo(archivoId, tipo).subscribe(blob => {
       const url = window.URL.createObjectURL(blob);
       const a = document.createElement('a');
       a.href = url;
-      a.download = nombre; // Usar el nombre original
+      a.download = nombre;
       document.body.appendChild(a);
       a.click();
       document.body.removeChild(a);
@@ -68,7 +77,7 @@ export class InicioComponent implements OnInit {
       console.error("Error al descargar el archivo", error);
     });
   }
-  
+
   reportarArchivo(archivo: any) {
     this.archivoSeleccionadoParaReporte = archivo;
     this.motivoSeleccionado = '';
@@ -81,12 +90,12 @@ export class InicioComponent implements OnInit {
       alert('⚠️ Debes especificar un motivo.');
       return;
     }
-  
+
     const reporte = {
       motivo: motivoFinal,
       archivo: { id: this.archivoSeleccionadoParaReporte.id }
     };
-  
+
     this.http.post('http://localhost:8080/api/reportes', reporte, { responseType: 'text' }).subscribe({
       next: () => {
         alert("📩 Reporte enviado correctamente.");
@@ -98,6 +107,61 @@ export class InicioComponent implements OnInit {
         alert("❌ Error al enviar el reporte.");
       }
     });
-    
-  }  
+  }
+
+  // Login
+  login() {
+    this.http.post('http://localhost:8080/auth/login', {
+      username: this.username,
+      password: this.password
+    }).subscribe({
+      next: (res: any) => {
+        localStorage.setItem('token', res.token);
+        this.cerrarModales();
+        location.reload();
+      },
+      error: () => alert("❌ Usuario o contraseña incorrectos")
+    });
+  }
+
+  // Registro
+  registrarUsuario() {
+    this.http.post('http://localhost:8080/auth/register', this.nuevoUsuario).subscribe({
+      next: () => {
+        this.cerrarModales();
+        location.reload();
+      },
+      error: err => {
+        if (err.status === 400) {
+          this.errorRegistro = '⚠️ El nombre de usuario ya está en uso.';
+        } else {
+          this.errorRegistro = 'Error al registrar usuario.';
+        }
+      }
+    });
+  }
+
+  // Mostrar modales
+  abrirLogin() {
+    this.mostrarLogin = true;
+    this.mostrarRegistro = false;
+  }
+
+  abrirRegistro() {
+    this.mostrarRegistro = true;
+    this.mostrarLogin = false;
+  }
+
+  cerrarModales() {
+    this.mostrarLogin = false;
+    this.mostrarRegistro = false;
+    this.errorRegistro = '';
+    this.username = '';
+    this.password = '';
+    this.nuevoUsuario = { username: '', email: '', password: '' };
+  }
+
+  isAuthenticated(): boolean {
+    return !!localStorage.getItem('token');
+  }
 }

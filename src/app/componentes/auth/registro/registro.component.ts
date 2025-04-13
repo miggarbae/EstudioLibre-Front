@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
@@ -8,11 +8,15 @@ import { FormsModule } from '@angular/forms';
   standalone: true,
   imports: [FormsModule],
   templateUrl: './registro.component.html',
-  styleUrl: './registro.component.scss'
+  styleUrls: ['./registro.component.scss']
 })
 export class RegistroComponent {
+  @Input() modal: boolean = false;
+  @Output() cerrar = new EventEmitter<void>();
+
   usuario = { username: '', email: '', password: '' };
   apiUrl = 'http://localhost:8080/auth/register';
+  errorRegistro: string = '';
 
   constructor(private http: HttpClient, private router: Router) {}
 
@@ -20,10 +24,21 @@ export class RegistroComponent {
     this.http.post<{ mensaje: string }>(this.apiUrl, this.usuario).subscribe(
       response => {
         console.log("✅ Registro exitoso:", response);
-        this.router.navigate(['/']); // Redirige a la página de inicio
+
+        if (this.modal) {
+          this.cerrar.emit();
+          setTimeout(() => location.reload(), 100); // Recarga tras cerrar modal
+        } else {
+          this.router.navigate(['/']);
+        }
       },
       error => {
-        console.error("❌ Error al registrar usuario", error);
+        if (error.status === 400 && error.error?.mensaje?.includes('existe')) {
+          this.errorRegistro = "⚠️ Ya existe un usuario con ese nombre.";
+        } else {
+          this.errorRegistro = "❌ Error al registrar usuario.";
+          console.error("Error:", error);
+        }
       }
     );
   }

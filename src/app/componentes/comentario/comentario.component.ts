@@ -29,10 +29,11 @@ export class ComentariosComponent implements OnInit {
 
   comentarios: Comentario[] = [];
   nuevoComentario: string = '';
-  nuevaValoracion: number = 5;
+  nuevaValoracion: number | null = null;
   usuarioActual: string = '';
   valoracionUsuario: number | null = null;
   valoracionMedia: number | null = null;
+  valoracionDirecta: number = 5;
 
   constructor(private comentarioService: ComentarioService) {}
 
@@ -50,23 +51,54 @@ export class ComentariosComponent implements OnInit {
 
   cargarComentarios() {
     this.comentarioService.obtenerComentarios(this.archivoId).subscribe(
-      (data) => (this.comentarios = data),
+      (data) => {
+        this.comentarios = data.filter(c => c.texto.trim() !== ''); //evitar mostrar comentarios vacíos porque cuando solo se valora se crea un comentario vacío
+      },
       (error) => console.error('Error al cargar comentarios:', error)
     );
   }
 
   agregarComentario() {
-    if (!this.nuevoComentario.trim()) return;
-
-    this.comentarioService.agregarComentario(this.archivoId, this.nuevoComentario, this.nuevaValoracion).subscribe(
+    const comentarioTexto = this.nuevoComentario.trim();
+    const hayTexto = comentarioTexto.length > 0;
+    const hayValoracion = this.nuevaValoracion !== null && this.nuevaValoracion >= 1 && this.nuevaValoracion <= 5;
+  
+    // Solo valorar (sin comentario)
+    if (!hayTexto && hayValoracion) {
+      this.comentarioService.valorarArchivo(this.archivoId, this.nuevaValoracion!).subscribe(
+        () => {
+          this.obtenerValoracionUsuario();
+          this.obtenerValoracionMedia();
+          this.nuevaValoracion = null; // Reset
+        },
+        (error) => console.error('Error al valorar:', error)
+      );
+      return;
+    }
+  
+    // Comentar (con o sin valoración)
+    if (hayTexto) {
+      this.comentarioService.agregarComentario(this.archivoId, comentarioTexto, hayValoracion ? this.nuevaValoracion! : 0).subscribe(
+        (comentario) => {
+          this.comentarios.push(comentario);
+          this.nuevoComentario = '';
+          this.nuevaValoracion = null;
+          this.obtenerValoracionUsuario();
+          this.obtenerValoracionMedia();
+        },
+        (error) => console.error('Error al agregar comentario:', error)
+      );
+    }
+  }
+  
+  enviarSoloValoracion() {
+    this.comentarioService.agregarComentario(this.archivoId, '', this.valoracionDirecta).subscribe(
       (comentario) => {
-        this.comentarios.push(comentario);
-        this.nuevoComentario = '';
-        this.nuevaValoracion = 5;
         this.obtenerValoracionUsuario();
         this.obtenerValoracionMedia();
+        alert('Valoración registrada correctamente.');
       },
-      (error) => console.error('Error al agregar comentario:', error)
+      (error) => console.error('Error al valorar el archivo:', error)
     );
   }
 

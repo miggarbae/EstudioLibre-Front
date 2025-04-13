@@ -3,11 +3,14 @@ import { CommonModule } from '@angular/common';
 import { Router, RouterModule } from '@angular/router';
 import { TokenService } from '../../services/token.service';
 import { SubirArchivoComponent } from '../subir-archivo/subir-archivo.component';
+import { MatToolbarModule } from '@angular/material/toolbar';
+import { MatButtonModule } from '@angular/material/button';
+
 
 @Component({
   selector: 'app-header',
   standalone: true,
-  imports: [CommonModule, RouterModule, SubirArchivoComponent],
+  imports: [CommonModule, RouterModule, SubirArchivoComponent, MatToolbarModule, MatButtonModule],
   templateUrl: './header.component.html',
   styleUrl: './header.component.scss'
 })

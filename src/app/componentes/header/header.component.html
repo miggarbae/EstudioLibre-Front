@@ -1,18 +1,15 @@
-<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow">
+<nav class="navbar navbar-expand-lg navbar-dark bg-dark fixed-top shadow-sm py-2">
   <div class="container-fluid">
-    <a class="navbar-brand d-flex align-items-center" routerLink="/">
-      <img src="../../../assets/logoSinFondo.png" alt="Logo" width="40" height="40" class="me-2">
-      EstudioLibre
+    <a class="navbar-brand d-flex align-items-center gap-2" routerLink="/">
+      <img src="../../../assets/logoSinFondo.png" alt="Logo" class="logo-img">
+      <span class="brand-title">Estudio Libre</span>
     </a>
 
     <div class="ms-auto d-flex gap-2">
-      <!-- <button class="btn btn-outline-light btn-sm" routerLink="/">🏠 Inicio</button>
-      <button class="btn btn-outline-light btn-sm" routerLink="/subir-archivo">📤 Subir</button> -->
       <ng-container *ngIf="!usuarioLogeado">
         <button class="btn btn-outline-light btn-sm" (click)="irALogin()">🔐 Login</button>
         <button class="btn btn-success btn-sm" (click)="irARegistro()">📝 Registro</button>
       </ng-container>
-
       <button *ngIf="usuarioLogeado" class="btn btn-outline-danger btn-sm" (click)="logout()">🚪 Logout</button>
     </div>
   </div>

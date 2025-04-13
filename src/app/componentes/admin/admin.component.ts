@@ -86,13 +86,55 @@ export class AdminComponent implements OnInit {
   }
 
   buscarArchivos(): void {
-    if (!this.terminoBusqueda.trim()) return;
-
-    this.http.get<any[]>(`http://localhost:8080/api/admin/archivos/busqueda?termino=${this.terminoBusqueda}`).subscribe(
-      res => {
-        this.usuarioSeleccionado = { username: 'Búsqueda', archivos: res };
+    const termino = this.terminoBusqueda.trim().toLowerCase();
+  
+    if (!termino) {
+      this.usuarioSeleccionado = null;
+      return;
+    }
+  
+    this.http.get<any[]>(`http://localhost:8080/api/admin/archivos/busqueda?termino=${termino}`).subscribe(
+      archivos => {
+        // Ver si coincide algún usuario también
+        const usuariosCoincidentes = this.usuarios.filter(u =>
+          u.username.toLowerCase().includes(termino)
+        );
+  
+        if (archivos.length > 0 || usuariosCoincidentes.length > 0) {
+          this.usuarioSeleccionado = {
+            username: 'Búsqueda',
+            archivos,
+            usuariosCoincidentes,
+          };
+        } else {
+          this.usuarioSeleccionado = {
+            username: 'Búsqueda',
+            archivos: [],
+            usuariosCoincidentes: [],
+          };
+        }
       },
-      err => console.error("Error al buscar archivos", err)
+      err => {
+        console.error("Error al buscar archivos", err);
+      }
     );
-  }
+  }  
+
+  actualizarRol(user: any): void {
+    const nuevoRol = user.roles;
+  
+    this.http.put(`http://localhost:8080/api/admin/usuarios/${user.id}/rol`, nuevoRol, {
+      headers: {
+        'Content-Type': 'application/json'
+      }
+    }).subscribe(
+      () => {
+        console.log(`Rol actualizado correctamente a ${nuevoRol}`);
+      },
+      (err) => {
+        console.error("Error al actualizar rol", err);
+        alert("❌ No se pudo actualizar el rol.");
+      }
+    );
+  }  
 }
