@@ -64,7 +64,7 @@
               <td>{{ archivo.nombre }}</td>
               <td>{{ archivo.fechaSubida | date: 'short' }}</td>
               <td class="d-flex gap-2">
-                <button class="btn btn-sm btn-outline-primary flex-fill boton-mini" (click)="descargarArchivo(archivo)"> 📥 Descargar </button>
+                <button class="btn btn-sm btn-outline-primary flex-fill buttonDownload" (click)="descargarArchivo(archivo)"> 📥 Descargar </button>
                 <button class="btn btn-sm btn-outline-warning flex-fill boton-mini" (click)="abrirModalEditar(archivo)"> ✏️ Editar </button>
                 <button class="btn btn-sm btn-outline-danger flex-fill boton-mini" (click)="eliminarArchivo(archivo)"> 🗑️ Eliminar </button>                
               </td>              

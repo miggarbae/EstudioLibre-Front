@@ -3,7 +3,7 @@
 
 <div class="modal-backdrop" *ngIf="mostrarFormulario" (click)="cerrarFormulario()">
   <div class="modal-content" (click)="$event.stopPropagation()">
-    <app-subir-archivo></app-subir-archivo>
+    <app-subir-archivo (subidaCompleta)="cerrarFormulario()"></app-subir-archivo>
   </div>
 </div>
 

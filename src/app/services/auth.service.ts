@@ -41,7 +41,8 @@ export class AuthService {
   }
 
   logout(): void {
-    localStorage.removeItem('token');
+    localStorage.removeItem('token'); // borro el token del localStorage
+    sessionStorage.clear(); // fuerzo a limpiar cachés residuales
     this.router.navigate(['/login']);
   }
 

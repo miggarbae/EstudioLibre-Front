@@ -3,6 +3,7 @@ import { ArchivoService } from '../../services/archivo.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgIf, NgFor} from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { EventEmitter, Output } from '@angular/core';
 
 @Component({
   selector: 'app-subir-archivo',
@@ -20,6 +21,8 @@ export class SubirArchivoComponent {
 
   materias = ['Matemáticas', 'Física', 'Química', 'Inglés', 'Historia', 'Biología', 'Lengua', 'Filosofía', 'Informática', 'Otros'];
   niveles = ['Primaria', 'Secundaria', 'Bachillerato', 'Universidad', 'Oposiciones', 'Otros'];
+
+  @Output() subidaCompleta = new EventEmitter<void>();
 
   constructor(private archivoService: ArchivoService) {}
 
@@ -58,15 +61,25 @@ export class SubirArchivoComponent {
     this.archivoService.subirArchivo(formData).subscribe(
       () => {
         alert('Archivo subido correctamente.');
-        this.vistaPrevia = null;
-        this.descripcion = '';
-        this.asignatura = '';
-        this.nivelEstudio = '';
+        this.resetearFormulario();
+        this.subidaCompleta.emit(); // <--- Aquí notificamos al padre
+
+        setTimeout(() => location.reload(), 100); // Recargar la pagina para que se muestren los cambios al subir un archivo
       },
       (error) => {
         console.error('Error al subir el archivo', error);
         alert('Error al subir el archivo.');
+        this.subidaCompleta.emit(); // <--- También cerramos aunque haya error
       }
     );
+  }  
+
+  resetearFormulario() {
+    this.vistaPrevia = null;
+    this.descripcion = '';
+    this.asignatura = '';
+    this.nivelEstudio = '';
+    this.nombreArchivo = '';
+    this.archivoSeleccionado = null;
   }  
 }
