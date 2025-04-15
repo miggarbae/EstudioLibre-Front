@@ -46,10 +46,12 @@ export class InicioComponent implements OnInit {
 
   obtenerTodosLosArchivos(): void {
     this.archivoService.obtenerArchivos().subscribe(
-      data => this.archivos = data,
+      data => {
+        this.archivos = data.map(a => ({ ...a, mostrarComentarios: false })); // Ocultar los comentarios al inicio
+      },
       error => console.error('Error al cargar archivos', error)
     );
-  }
+  }  
 
   buscarEnTiempoReal(): void {
     if (this.terminoBusqueda.trim() === '') {
@@ -58,9 +60,16 @@ export class InicioComponent implements OnInit {
     }
 
     this.archivoService.buscarArchivos(this.terminoBusqueda).subscribe(
-      data => this.archivos = data,
+      data => {
+        this.archivos = data.map(a => ({ ...a, mostrarComentarios: false }));
+      },
       error => console.error("❌ Error en la búsqueda:", error)
-    );
+    );    
+  }
+
+  // Mostrar/ocultar comentarios
+  toggleComentarios(archivo: any): void {
+    archivo.mostrarComentarios = !archivo.mostrarComentarios;
   }
 
   descargarArchivo(archivoId: number, nombre: string, tipo: string) {

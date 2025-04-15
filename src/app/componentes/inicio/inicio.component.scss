@@ -149,4 +149,22 @@
    opacity: 0.4;
   }
  }
-  
+
+ .acordeon-comentarios {
+  border-left: 3px solid #17a2b8;
+  padding: 1rem;
+  background-color: #f8f9fa;
+  border-radius: 6px;
+  animation: fadeInComentarios 0.3s ease-in-out;
+}
+
+@keyframes fadeInComentarios {
+  from {
+    opacity: 0;
+    transform: translateY(-5px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

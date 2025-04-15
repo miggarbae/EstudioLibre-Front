@@ -93,45 +93,35 @@ export class PerfilComponent implements OnInit {
 
   // Actualizar perfil con posibilidad de subir imagen
   actualizarPerfil(): void {
-    if (!this.usuario?.username) {
-      console.error('Usuario no válido. Abortando...');
-      return;
-    }
-
+    if (!this.usuario?.username) return;
+  
     const formData = new FormData();
-    formData.append('nombre', this.usuario.username);
+    formData.append('username', this.usuario.username);
     formData.append('email', this.usuario.email);
     if (this.nuevaContrasena) {
       formData.append('password', this.nuevaContrasena);
     }
-
+  
+    const confirmacion = confirm('⚠️ Vas a modificar tu perfil. Esto cerrará tu sesión y tendrás que volver a iniciar sesión. ¿Deseas continuar?');
+    if (!confirmacion) return;
+  
     this.usuarioService.actualizarUsuario(formData).subscribe({
-      next: (usuarioActualizado) => {
-        if (this.imagenSeleccionada) {
-          const imagenForm = new FormData();
-          imagenForm.append('imagen', this.imagenSeleccionada);
-          this.usuarioService.subirImagen(usuarioActualizado.id, imagenForm).subscribe({
-            next: () => {
-              alert('Perfil actualizado correctamente con imagen.');
-              this.resetFormulario();
-            },
-            error: (err) => {
-              console.error('Error al subir la imagen', err);
-              alert('Perfil actualizado pero falló la imagen.');
-            },
-          });
-        } else {
-          alert('Perfil actualizado correctamente.');
-          this.resetFormulario();
-        }
+      next: () => {
+        alert('✅ Perfil actualizado correctamente. Serás redirigido al login.');
+        localStorage.removeItem('token');
+        window.location.href = '/login';
       },
       error: (error) => {
-        console.error('Error al actualizar el perfil', error);
-        alert('Error al actualizar el perfil.');
-      },
+        if (error.status === 409 && error.error?.campo && error.error?.mensaje) {
+          alert(`❌ Error: ${error.error.mensaje}`);
+        } else {
+          console.error('Error al actualizar el perfil', error);
+          alert('❌ Ocurrió un error al actualizar el perfil.');
+        }
+      }
     });
   }
-
+  
   // Reiniciar estado del formulario
   resetFormulario(): void {
     this.enEdicion = false;

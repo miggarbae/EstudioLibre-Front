@@ -28,11 +28,10 @@ export class AuthService {
     console.log('🧾 ROL OBTENIDO DESDE TOKEN:', userRole);
   
     if (userRole === 'ROLE_ADMIN') {
-      this.router.navigate(['/admin']);
-    } else if (userRole === 'ROLE_USER') {
-      this.router.navigate(['/inicio']);
-    } else {
-      this.router.navigate(['/login']);
+      this.router.navigate(['/admin']).then(() => location.reload());    } else if (userRole === 'ROLE_USER') {
+        this.router.navigate(['/inicio']).then(() => location.reload());
+      } else {
+      this.router.navigate(['/login'])
     }
   }  
 
@@ -43,7 +42,7 @@ export class AuthService {
   logout(): void {
     localStorage.removeItem('token'); // borro el token del localStorage
     sessionStorage.clear(); // fuerzo a limpiar cachés residuales
-    this.router.navigate(['/login']);
+    this.router.navigate(['/login']).then(() => location.reload());
   }
 
   isAuthenticated(): boolean {
