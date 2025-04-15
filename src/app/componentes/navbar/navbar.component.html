@@ -7,6 +7,9 @@
         <a *ngIf="usuarioAutenticado" class="btn btn-outline-info btn-sm" routerLink="/perfil">
           👤 {{ username }} - Ver Perfil
         </a>
+        <button *ngIf="esAdmin" class="btn btn-outline-dark btn-sm" (click)="irAPanelAdmin()">
+          👑 Panel Admin
+        </button>
       </div>
     </div>
   </nav>

@@ -5,6 +5,7 @@ import { MatTableModule } from '@angular/material/table';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { Archivo } from '../../services/archivo.service';
+import { ArchivoService } from '../../services/archivo.service';
 
 @Component({
   selector: 'app-admin',
@@ -20,7 +21,7 @@ export class AdminComponent implements OnInit {
   usuarioSeleccionado: any = null;
   terminoBusqueda: string = '';
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private archivoService: ArchivoService) {}
 
   ngOnInit(): void {
     this.cargarReportes();
@@ -136,5 +137,20 @@ export class AdminComponent implements OnInit {
         alert("❌ No se pudo actualizar el rol.");
       }
     );
-  }  
+  }
+  
+  descargarArchivo(archivoId: number, nombre: string, tipo: string) {
+    this.archivoService.descargarArchivo(archivoId, tipo).subscribe(blob => {
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = nombre;
+      document.body.appendChild(a);
+      a.click();
+      document.body.removeChild(a);
+      window.URL.revokeObjectURL(url);
+    }, error => {
+      console.error("Error al descargar el archivo", error);
+    });
+  }
 }
