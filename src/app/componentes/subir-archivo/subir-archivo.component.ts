@@ -34,9 +34,10 @@ export class SubirArchivoComponent {
 
       // Verificar formato permitido
       const formatosPermitidos = ['application/pdf', 
-                                  'application/vnd.openxmlformats-officedocument.wordprocessingml.document']; // PDF y DOCX
+                                  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+                                  'application/zip']; // PDF, DOCX y ZIP
       if (!formatosPermitidos.includes(file.type)) {
-        alert('Formato no permitido. Solo se aceptan PDF y DOCX.');
+        alert('Formato no permitido. Solo se aceptan PDF, DOCX y ZIP.');
         this.archivoSeleccionado = null;
         return;
       }

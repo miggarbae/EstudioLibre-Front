@@ -1,6 +1,6 @@
 <form (submit)="subirArchivo()" class="needs-validation" novalidate>
     <label for="archivo">Selecciona un archivo:</label>
-    <input type="file" (change)="onFileSelected($event)" class="form-control" accept=".pdf,.docx" required>
+    <input type="file" (change)="onFileSelected($event)" class="form-control" accept=".pdf,.docx,.zip" required>
   
     <label for="descripcion">Descripción (opcional):</label>
     <textarea [(ngModel)]="descripcion" name="descripcion" rows="3" class="form-control"></textarea>
