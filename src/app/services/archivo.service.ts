@@ -17,7 +17,7 @@ export interface Archivo {
   providedIn: 'root'
 })
 export class ArchivoService {
-  private apiUrl = 'http://localhost:8080/api/archivos'; // URL del backend
+  private apiUrl = 'http://springboot_app:8080/api/archivos'; // URL del backend
 
   constructor(private http: HttpClient) {}
 

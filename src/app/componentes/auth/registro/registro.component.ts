@@ -15,7 +15,7 @@ export class RegistroComponent {
   @Output() cerrar = new EventEmitter<void>();
 
   usuario = { username: '', email: '', password: '' };
-  apiUrl = 'http://localhost:8080/auth/register';
+  apiUrl = 'http://springboot_app:8080/auth/register';
   errorRegistro: string = '';
 
   constructor(private http: HttpClient, private router: Router) {}

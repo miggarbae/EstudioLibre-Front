@@ -16,7 +16,7 @@ interface Comentario {
   providedIn: 'root',
 })
 export class ComentarioService {
-  private apiUrl = 'http://localhost:8080/api/comentarios';
+  private apiUrl = 'http://springboot_app:8080/api/comentarios';
 
   constructor(private http: HttpClient) {}
 

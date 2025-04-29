@@ -8,7 +8,8 @@ import { TokenService } from './token.service';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = 'http://localhost:8080/auth';
+  //private apiUrl = 'http://springboot_app:8080/auth';
+  private apiUrl = 'api/auth';
 
   constructor(
     private http: HttpClient,
