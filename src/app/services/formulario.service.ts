@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 
-// Este servicio es para mostrar y ocultar el formulario que me interese
 @Injectable({
   providedIn: 'root',
 })

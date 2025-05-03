@@ -29,14 +29,14 @@ export class AdminComponent implements OnInit {
   }
 
   cargarReportes(): void {
-    this.http.get<any[]>('http://localhost:8080/api/reportes').subscribe(
+    this.http.get<any[]>(`/api/reportes`).subscribe(
       res => this.archivosReportados = res,
       err => console.error("Error al cargar reportes", err)
     );
   }
 
   cargarUsuarios(): void {
-    this.http.get<any[]>('http://localhost:8080/api/admin/usuarios').subscribe(
+    this.http.get<any[]>(`/api/admin/usuarios`).subscribe(
       res => this.usuarios = res,
       err => console.error("Error al cargar usuarios", err)
     );
@@ -48,7 +48,7 @@ export class AdminComponent implements OnInit {
 
   eliminarUsuario(id: number): void {
     if (confirm("¿Eliminar este usuario?")) {
-      this.http.delete(`http://localhost:8080/api/admin/usuarios/${id}`).subscribe(
+      this.http.delete(`/api/admin/usuarios/${id}`).subscribe(
         () => {
           this.cargarUsuarios();
           this.usuarioSeleccionado = null;
@@ -56,30 +56,30 @@ export class AdminComponent implements OnInit {
         err => console.error("Error al eliminar usuario", err)
       );
     }
-  }  
+  }
 
   cambiarVisibilidad(archivo: any): void {
     const nuevoEstado = !archivo.visible;
-    this.http.put(`http://localhost:8080/api/admin/archivos/${archivo.id}/visibilidad?visible=${nuevoEstado}`, {}).subscribe(
+    this.http.put(`/api/admin/archivos/${archivo.id}/visibilidad?visible=${nuevoEstado}`, {}).subscribe(
       () => archivo.visible = nuevoEstado,
       err => console.error("Error al cambiar visibilidad", err)
     );
-  }   
+  }
 
   eliminarArchivo(archivo: Archivo): void {
     if (confirm("¿Eliminar este archivo?")) {
-      this.http.delete(`http://localhost:8080/api/admin/archivos/${archivo.id}`).subscribe(
+      this.http.delete(`/api/admin/archivos/${archivo.id}`).subscribe(
         () => {
           this.usuarioSeleccionado.archivos = this.usuarioSeleccionado.archivos.filter((a: Archivo) => a.id !== archivo.id);
         },
         err => console.error("Error al eliminar archivo", err)
       );
     }
-  }  
+  }
 
   eliminarReporte(reporteId: number): void {
     if (confirm("¿Eliminar este reporte?")) {
-      this.http.delete(`http://localhost:8080/api/admin/reportes/${reporteId}`).subscribe(
+      this.http.delete(`/api/admin/reportes/${reporteId}`).subscribe(
         () => this.cargarReportes(),
         err => console.error("Error al eliminar reporte", err)
       );
@@ -88,57 +88,42 @@ export class AdminComponent implements OnInit {
 
   buscarArchivos(): void {
     const termino = this.terminoBusqueda.trim().toLowerCase();
-  
+
     if (!termino) {
       this.usuarioSeleccionado = null;
       return;
     }
-  
-    this.http.get<any[]>(`http://localhost:8080/api/admin/archivos/busqueda?termino=${termino}`).subscribe(
+
+    this.http.get<any[]>(`/api/admin/archivos/busqueda?termino=${termino}`).subscribe(
       archivos => {
-        // Ver si coincide algún usuario también
         const usuariosCoincidentes = this.usuarios.filter(u =>
           u.username.toLowerCase().includes(termino)
         );
-  
-        if (archivos.length > 0 || usuariosCoincidentes.length > 0) {
-          this.usuarioSeleccionado = {
-            username: 'Búsqueda',
-            archivos,
-            usuariosCoincidentes,
-          };
-        } else {
-          this.usuarioSeleccionado = {
-            username: 'Búsqueda',
-            archivos: [],
-            usuariosCoincidentes: [],
-          };
-        }
+
+        this.usuarioSeleccionado = {
+          username: 'Búsqueda',
+          archivos,
+          usuariosCoincidentes,
+        };
       },
-      err => {
-        console.error("Error al buscar archivos", err);
-      }
+      err => console.error("Error al buscar archivos", err)
     );
-  }  
+  }
 
   actualizarRol(user: any): void {
     const nuevoRol = user.roles;
-  
-    this.http.put(`http://localhost:8080/api/admin/usuarios/${user.id}/rol`, nuevoRol, {
-      headers: {
-        'Content-Type': 'application/json'
-      }
+
+    this.http.put(`/api/admin/usuarios/${user.id}/rol`, nuevoRol, {
+      headers: { 'Content-Type': 'application/json' }
     }).subscribe(
-      () => {
-        console.log(`Rol actualizado correctamente a ${nuevoRol}`);
-      },
-      (err) => {
+      () => console.log(`Rol actualizado a ${nuevoRol}`),
+      err => {
         console.error("Error al actualizar rol", err);
         alert("❌ No se pudo actualizar el rol.");
       }
     );
   }
-  
+
   descargarArchivo(archivoId: number, nombre: string, tipo: string) {
     this.archivoService.descargarArchivo(archivoId, tipo).subscribe(blob => {
       const url = window.URL.createObjectURL(blob);

@@ -4,6 +4,7 @@ import { ArchivoService } from '../../services/archivo.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterModule } from '@angular/router';
+import { environment } from '../../../environments/environment';
 
 @Component({
   selector: 'app-perfil',
@@ -20,7 +21,6 @@ export class PerfilComponent implements OnInit {
   enEdicion = false;
   archivoSeleccionado: any = null;
 
-  // para editar archivos
   materias = ['Matemáticas', 'Física', 'Química', 'Inglés', 'Historia', 'Biología', 'Lengua', 'Filosofía', 'Informática', 'Otros'];
   niveles = ['Primaria', 'Secundaria', 'Bachillerato', 'Universidad', 'Oposiciones', 'Otros'];
 
@@ -36,7 +36,6 @@ export class PerfilComponent implements OnInit {
     this.cargarArchivos();
   }
 
-  // Cargar perfil de usuario
   cargarUsuario(): void {
     this.usuarioService.obtenerUsuario().subscribe({
       next: (data) => (this.usuario = data),
@@ -44,7 +43,6 @@ export class PerfilComponent implements OnInit {
     });
   }
 
-  // Cargar archivos del usuario
   cargarArchivos(): void {
     this.archivoService.obtenerArchivosUsuario().subscribe({
       next: (data) => (this.archivos = data),
@@ -52,36 +50,31 @@ export class PerfilComponent implements OnInit {
     });
   }
 
-  // Iniciar edición
   habilitarEdicion(): void {
     this.enEdicion = true;
   }
 
-  // Cancelar edición
   cancelarEdicion(): void {
     this.resetFormulario();
   }
 
-  // Abrir input de archivo al hacer clic en la imagen o el ícono de lápiz
   abrirInputImagen(): void {
-    this.inputImagenRef.nativeElement.value = null; // Restablece el valor del input
-    this.inputImagenRef.nativeElement.click(); // Abre el selector de archivos
+    this.inputImagenRef.nativeElement.value = null;
+    this.inputImagenRef.nativeElement.click();
   }
-  
 
-  // Guardar imagen seleccionada
   onFileSelected(event: any): void {
     const file = event.target.files[0];
     if (file && this.usuario?.id) {
-      this.imagenSeleccionada = file; //Aquí verificamos que no es null
-  
+      this.imagenSeleccionada = file;
+
       const formData = new FormData();
       formData.append('imagen', this.imagenSeleccionada!);
-  
+
       this.usuarioService.subirImagen(this.usuario.id, formData).subscribe(
         () => {
           alert('Imagen de perfil actualizada correctamente.');
-          this.cargarUsuario(); // Recarga el usuario para mostrar la nueva imagen
+          this.cargarUsuario();
         },
         (error) => {
           console.error('Error al subir la imagen', error);
@@ -89,22 +82,21 @@ export class PerfilComponent implements OnInit {
         }
       );
     }
-  }  
+  }
 
-  // Actualizar perfil con posibilidad de subir imagen
   actualizarPerfil(): void {
     if (!this.usuario?.username) return;
-  
+
     const formData = new FormData();
     formData.append('username', this.usuario.username);
     formData.append('email', this.usuario.email);
     if (this.nuevaContrasena) {
       formData.append('password', this.nuevaContrasena);
     }
-  
+
     const confirmacion = confirm('⚠️ Vas a modificar tu perfil. Esto cerrará tu sesión y tendrás que volver a iniciar sesión. ¿Deseas continuar?');
     if (!confirmacion) return;
-  
+
     this.usuarioService.actualizarUsuario(formData).subscribe({
       next: () => {
         alert('✅ Perfil actualizado correctamente. Serás redirigido al login.');
@@ -121,8 +113,7 @@ export class PerfilComponent implements OnInit {
       }
     });
   }
-  
-  // Reiniciar estado del formulario
+
   resetFormulario(): void {
     this.enEdicion = false;
     this.nuevaContrasena = '';
@@ -130,7 +121,6 @@ export class PerfilComponent implements OnInit {
     this.cargarUsuario();
   }
 
-  // Confirmar eliminación de cuenta
   confirmarEliminacion(): void {
     const confirmacion = confirm('¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.');
     if (confirmacion) {
@@ -138,7 +128,6 @@ export class PerfilComponent implements OnInit {
     }
   }
 
-  // Descargar archivo
   descargarArchivo(archivo: any): void {
     this.archivoService.descargarArchivo(archivo.id, archivo.tipo).subscribe({
       next: (blob) => {
@@ -156,14 +145,13 @@ export class PerfilComponent implements OnInit {
     });
   }
 
-  // Eliminar archivo (futura implementación)
   eliminarArchivo(archivo: any): void {
     const confirmar = confirm(`¿Estás seguro de eliminar el archivo "${archivo.nombre}"?`);
     if (confirmar) {
       this.archivoService.eliminarArchivo(archivo.id).subscribe({
         next: () => {
           alert('Archivo eliminado correctamente.');
-          this.cargarArchivos(); // Recargar lista de archivos
+          this.cargarArchivos();
         },
         error: (err) => {
           console.error('Error al eliminar el archivo', err);
@@ -171,28 +159,26 @@ export class PerfilComponent implements OnInit {
         }
       });
     }
-  }  
+  }
 
-  // Obtener ruta de imagen de perfil
   obtenerImagenPerfil(): string {
     if (this.usuario?.rutaImagenPerfil) {
-      return `http://localhost:8080${this.usuario.rutaImagenPerfil}`;
+      return `${environment.apiBaseUrl}${this.usuario.rutaImagenPerfil}`;
     }
     return 'assets/usuario-default.jpg';
   }
 
-  // ventana modal para editar archivo
   abrirModalEditar(archivo: any) {
-    this.archivoSeleccionado = { ...archivo }; // copia para editar
+    this.archivoSeleccionado = { ...archivo };
   }
-  
+
   cerrarModalEditar() {
     this.archivoSeleccionado = null;
   }
-  
+
   guardarCambiosArchivo() {
     if (!this.archivoSeleccionado?.id) return;
-  
+
     this.archivoService.editarArchivo(this.archivoSeleccionado.id, this.archivoSeleccionado).subscribe({
       next: () => {
         alert('Archivo actualizado correctamente.');

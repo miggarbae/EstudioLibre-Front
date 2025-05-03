@@ -47,11 +47,11 @@ export class InicioComponent implements OnInit {
   obtenerTodosLosArchivos(): void {
     this.archivoService.obtenerArchivos().subscribe(
       data => {
-        this.archivos = data.map(a => ({ ...a, mostrarComentarios: false })); // Ocultar los comentarios al inicio
+        this.archivos = data.map(a => ({ ...a, mostrarComentarios: false }));
       },
       error => console.error('Error al cargar archivos', error)
     );
-  }  
+  }
 
   buscarEnTiempoReal(): void {
     if (this.terminoBusqueda.trim() === '') {
@@ -64,10 +64,9 @@ export class InicioComponent implements OnInit {
         this.archivos = data.map(a => ({ ...a, mostrarComentarios: false }));
       },
       error => console.error("❌ Error en la búsqueda:", error)
-    );    
+    );
   }
 
-  // Mostrar/ocultar comentarios
   toggleComentarios(archivo: any): void {
     archivo.mostrarComentarios = !archivo.mostrarComentarios;
   }
@@ -105,7 +104,7 @@ export class InicioComponent implements OnInit {
       archivo: { id: this.archivoSeleccionadoParaReporte.id }
     };
 
-    this.http.post('http://localhost:8080/api/reportes', reporte, { responseType: 'text' }).subscribe({
+    this.http.post('/api/reportes', reporte, { responseType: 'text' }).subscribe({
       next: () => {
         alert("📩 Reporte enviado correctamente.");
         this.archivoSeleccionadoParaReporte = null;
@@ -118,9 +117,8 @@ export class InicioComponent implements OnInit {
     });
   }
 
-  // Login
   login() {
-    this.http.post('http://localhost:8080/auth/login', {
+    this.http.post('/api/auth/login', {
       username: this.username,
       password: this.password
     }).subscribe({
@@ -133,9 +131,8 @@ export class InicioComponent implements OnInit {
     });
   }
 
-  // Registro
   registrarUsuario() {
-    this.http.post('http://localhost:8080/auth/register', this.nuevoUsuario).subscribe({
+    this.http.post('/api/auth/register', this.nuevoUsuario).subscribe({
       next: () => {
         this.cerrarModales();
         location.reload();
@@ -150,7 +147,6 @@ export class InicioComponent implements OnInit {
     });
   }
 
-  // Mostrar modales
   abrirLogin() {
     this.mostrarLogin = true;
     this.mostrarRegistro = false;

@@ -1,9 +1,7 @@
-import { Component, OnInit } from '@angular/core';
-import { ArchivoService } from '../../services/archivo.service';
-import { ActivatedRoute, Router } from '@angular/router';
-import { NgIf, NgFor} from '@angular/common';
+import { Component, EventEmitter, Output } from '@angular/core';
+import { NgIf, NgFor } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import { EventEmitter, Output } from '@angular/core';
+import { ArchivoService } from '../../services/archivo.service';
 
 @Component({
   selector: 'app-subir-archivo',
@@ -32,17 +30,18 @@ export class SubirArchivoComponent {
       this.archivoSeleccionado = file;
       this.nombreArchivo = file.name;
 
-      // Verificar formato permitido
-      const formatosPermitidos = ['application/pdf', 
-                                  'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
-                                  'application/zip']; // PDF, DOCX y ZIP
+      const formatosPermitidos = [
+        'application/pdf',
+        'application/vnd.openxmlformats-officedocument.wordprocessingml.document',
+        'application/zip'
+      ];
+
       if (!formatosPermitidos.includes(file.type)) {
         alert('Formato no permitido. Solo se aceptan PDF, DOCX y ZIP.');
         this.archivoSeleccionado = null;
         return;
       }
 
-      // Vista previa (solo nombre del archivo)
       this.vistaPrevia = file.name;
     }
   }
@@ -63,17 +62,17 @@ export class SubirArchivoComponent {
       () => {
         alert('Archivo subido correctamente.');
         this.resetearFormulario();
-        this.subidaCompleta.emit(); // <--- Aquí notificamos al padre
+        this.subidaCompleta.emit();
 
-        setTimeout(() => location.reload(), 100); // Recargar la pagina para que se muestren los cambios al subir un archivo
+        setTimeout(() => location.reload(), 100);
       },
       (error) => {
         console.error('Error al subir el archivo', error);
         alert('Error al subir el archivo.');
-        this.subidaCompleta.emit(); // <--- También cerramos aunque haya error
+        this.subidaCompleta.emit();
       }
     );
-  }  
+  }
 
   resetearFormulario() {
     this.vistaPrevia = null;
@@ -82,5 +81,5 @@ export class SubirArchivoComponent {
     this.nivelEstudio = '';
     this.nombreArchivo = '';
     this.archivoSeleccionado = null;
-  }  
+  }
 }

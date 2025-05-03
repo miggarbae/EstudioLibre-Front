@@ -1,12 +1,13 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class UsuarioService {
-  private apiUrl = 'http://springboot_app:8080/api/usuarios';
+  private apiUrl = `${environment.apiBaseUrl}/api/usuarios`;
 
   constructor(private http: HttpClient) {}
 
@@ -43,5 +44,5 @@ export class UsuarioService {
         Authorization: `Bearer ${localStorage.getItem('token') || ''}`
       })
     });
-  }  
+  }
 }

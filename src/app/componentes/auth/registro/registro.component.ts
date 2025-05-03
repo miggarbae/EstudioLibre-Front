@@ -2,6 +2,7 @@ import { Component, EventEmitter, Output, Input } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { FormsModule } from '@angular/forms';
+import { environment } from '../../../../environments/environment';
 
 @Component({
   selector: 'app-registro',
@@ -15,7 +16,7 @@ export class RegistroComponent {
   @Output() cerrar = new EventEmitter<void>();
 
   usuario = { username: '', email: '', password: '' };
-  apiUrl = 'http://springboot_app:8080/auth/register';
+  apiUrl = `${environment.apiBaseUrl}/api/auth/register`;
   errorRegistro: string = '';
 
   constructor(private http: HttpClient, private router: Router) {}

@@ -3,13 +3,13 @@ import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
 import { Observable } from 'rxjs';
 import { TokenService } from './token.service';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  //private apiUrl = 'http://springboot_app:8080/auth';
-  private apiUrl = 'api/auth';
+  private apiUrl = `${environment.apiBaseUrl}/api/auth`;
 
   constructor(
     private http: HttpClient,
@@ -24,25 +24,24 @@ export class AuthService {
   handleLoginResponse(response: any): void {
     const token = response.token;
     localStorage.setItem('token', token);
-  
+
     const userRole = this.tokenService.getUserRole();
-    console.log('🧾 ROL OBTENIDO DESDE TOKEN:', userRole);
-  
     if (userRole === 'ROLE_ADMIN') {
-      this.router.navigate(['/admin']).then(() => location.reload());    } else if (userRole === 'ROLE_USER') {
-        this.router.navigate(['/inicio']).then(() => location.reload());
-      } else {
-      this.router.navigate(['/login'])
+      this.router.navigate(['/admin']).then(() => location.reload());
+    } else if (userRole === 'ROLE_USER') {
+      this.router.navigate(['/inicio']).then(() => location.reload());
+    } else {
+      this.router.navigate(['/login']);
     }
-  }  
+  }
 
   register(username: string, password: string): Observable<any> {
     return this.http.post(`${this.apiUrl}/register`, { username, password });
   }
 
   logout(): void {
-    localStorage.removeItem('token'); // borro el token del localStorage
-    sessionStorage.clear(); // fuerzo a limpiar cachés residuales
+    localStorage.removeItem('token');
+    sessionStorage.clear();
     this.router.navigate(['/login']).then(() => location.reload());
   }
 

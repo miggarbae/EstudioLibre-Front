@@ -1,4 +1,4 @@
 export const environment = {
-    production: true,
-    apiBaseUrl: 'https://tu-dominio.com' // ← reemplazá por el real
-  };
+  production: true,
+  apiBaseUrl: '' // Producción: se usará Nginx como proxy (rutas relativas)
+};

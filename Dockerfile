@@ -5,7 +5,7 @@ FROM nginx:alpine
 COPY dist/estudio-libre/browser /usr/share/nginx/html
 
 # Copiamos una configuración custom de nginx (opcional)
-# COPY nginx.conf /etc/nginx/nginx.conf
+COPY nginx.conf /etc/nginx/conf.d/default.conf
 
 # Expone el puerto 80 para el servidor web
 EXPOSE 80

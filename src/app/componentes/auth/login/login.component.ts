@@ -15,6 +15,7 @@ import { TokenService } from '../../../services/token.service';
 export class LoginComponent {
   username: string = '';
   password: string = '';
+  
 
   @Input() modal: boolean = false;
   @Output() cerrar = new EventEmitter<void>();
